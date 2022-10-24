@@ -1,0 +1,52 @@
+{% extends 'home_page/homePage2.html.twig' %}
+
+{% block title %}Seguridad{% endblock %}
+{% block content %}
+    <div id="all">
+        <div id="content">
+            <div class="container">
+                <!-- breadcrumb-->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('front_user_micuenta', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}">Mi cuenta</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">Seguridad</li>
+                    </ol>
+                </nav>
+                {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+                {% for message in messages %}
+                    <div class="col-md-8">
+                        <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                            <strong>{{label}}</strong>, {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+                    <script>
+                        $("#flashMessage").fadeTo(7000, 500).slideUp(500, function () {
+                            $("#flashMessage").alert('close');
+                        });
+                    </script>
+                {% endfor %}
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                            <div class="icon"><i class="fas fa-key fa-3x"></i></div>
+                            <h3><a href="{{ url('front_cliente_change_contrasena', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}">Cambiar contraseña</a></h3>
+                            <small class="text-secondary mb-0">Se recomienda cambiarla cada 72 días</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                            <div class="icon"><i class="fas fa-user fa-3x"></i></div>
+                            <h3><a href="{{ url('front_cliente_cambiar_usuario', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}">Cambiar usuario</a></h3>
+                            <small class="text-secondary mb-0">Cambiar el nombre de usuario del sitio</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'backend/User/indexUsuario.html.twig' %}
+{% block title %}Asignar roles{% endblock %}
+{% set list = 'Roles' %}
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_user_index') }}">Lista usuarios</a></li>
+                        <li><span>Asignando roles {{ usuario.nombreCompleto }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="mt-4">Asignando roles al usuario {{ usuario.nombreCompleto }}</h4>
+    <hr>
+    {% form_theme form 'bootstrap_4_layout.html.twig' %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="row">
+        <div class="col-10">
+            <div class="card card-bordered">
+                <div class="card-body form-row align-items-center">
+                {% for rol in form.rolesSistema %}
+                    <div class="col-3">
+                        {{ form_widget(rol) }}
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="card-footer text-right mt-4">
+                    {{ form_widget(form.guardar) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'home_page/homePage2.html.twig' %}
+{% block title %}Restablecer contraseña{% endblock %}
+{% block content %}
+    <div class="container">
+        {% for flashError in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+        {% endfor %}
+        <h1>Restablece tu contraseña</h1>
+        {% form_theme requestForm 'bootstrap_4_layout.html.twig' %}
+        {{ form_start(requestForm) }}
+            {{ form_row(requestForm.email) }}
+            <div>
+                <small>
+                    Ingresa tu email y se te enviara un link para restablecer tu contraseña
+                </small>
+            </div>
+
+            <button class="btn btn-primary">Enviar email</button>
+        {{ form_end(requestForm) }}
+    </div>
+{% endblock %}

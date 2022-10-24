@@ -1,0 +1,32 @@
+{% extends 'backend/Default/homePage.html.twig' %}
+{% block title %}Restablecer contraseña{% endblock %}
+{% set menu = 'Administracion usuarios' %}
+{% set list = 'Restablecer password' %}
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_user_index') }}">Lista de usuarios</a></li>
+                        <li><span>Restablecer contraseñas</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <h4 class="mt-4">Restablece tu contraseña</h4>
+    {% form_theme requestForm 'bootstrap_4_layout.html.twig' %}
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <div class="small">
+            Ingresa tu email y se te enviara un link para restablecer tu contraseña
+        </div>
+        <button class="btn btn-primary">Enviar email</button>
+    {{ form_end(requestForm) }}
+</div>
+{% endblock %}

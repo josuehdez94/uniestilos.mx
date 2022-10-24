@@ -1,0 +1,25 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+ </head>
+<body>
+{% block body %}
+{% endblock %}
+{% block stylesheets %}
+    {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+    {# {{ encore_entry_link_tags('app') }} #}
+    <link rel="stylesheet" href="{{ asset('build/app.css') }}"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock %}
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM="crossorigin="anonymous"></script>
+    {# {{ encore_entry_script_tags('app') }} #}
+    {# <script src="{{ asset('build/app.js') }}"></script> #} 
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends 'backend/Articulo/baseEditarArticulo.html.twig' %}
+{% block editarArticulo %}
+    <div class="mt-2">
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
+        <div class="row">
+            <div class="col-md-10">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                <div class="form-row align-items-center mt-2">
+                    <div class="col-12">
+                        {{ form_label(form.descripcion) }}
+                        {{ form_widget(form.descripcion) }}
+                    </div>
+                </div>
+                <div class="form-row align-items-center mt-2">
+                    <div class="col-12 text-right">
+                        {{ form_widget(form.guardar) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

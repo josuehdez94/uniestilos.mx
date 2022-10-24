@@ -1,0 +1,57 @@
+{% extends 'backend/Articulo/indexArticulo.html.twig' %}
+{% block title %}Editar articulo{% endblock %}
+{% block buscador %}{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="{{ asset('bootstrapFileInput/css/fileinput.min.css') }}">
+    <script src="{{ asset('bootstrapFileInput/js/fileinput.js') }}"></script>
+    <script src="{{ asset('bootstrapFileInput/js/locales/es.js') }}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+	<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <div class="contenido mt-2">
+        <div class="page-title-area">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumbs-area clearfix">
+                        <ul class="breadcrumbs pull-left">
+                            <li><a href="{{ url('backend_articulo_index') }}">Lista Articulos</a></li>
+                            <li><span>Editando {{ articulo.sku }}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <h4 class="mt-2">Editando Articulo <b>{{ articulo.descripcion ~ ' ' ~ '(' ~ articulo.sku ~ ')' }}</b></h4>
+        <hr>
+        {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+            {% for message in messages %}
+                <div class="col-md-8">
+                    <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                        <strong>{{label}}</strong>, {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+            <script>
+                $("#flashMessage").fadeTo(7000, 500).slideUp(500, function () {
+                    $("#flashMessage").alert('close');
+                });
+            </script>
+        {% endfor %}
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {{ submenu is defined and submenu == 'generales' ? 'active bg-primary text-light' }}" id="generales-tab" href="{{ url('backend_articulo_editar', {'id': articulo.id }) }}" role="tab">General</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {{ submenu is defined and submenu == 'fotografias' ? 'active bg-primary text-light' }}" id="fotografias-tab" href="{{ url('backend_articulo_fotografia_editar', {'id': articulo.id }) }}" role="tab">Fotografias</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ submenu is defined and submenu == 'descripcion' ? 'active bg-primary text-light' }}" id="descripcion-tab" href="{{ url('backend_articulo_descripcion_editar', {'articulo_id': articulo.id}) }}" role="tab">Descripción</a>
+            </li>
+        </ul>
+        {% block editarArticulo %}
+        {% endblock %}
+    </div>
+{% endblock %}

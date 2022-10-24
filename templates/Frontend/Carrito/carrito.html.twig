@@ -1,0 +1,282 @@
+{% extends 'home_page/homePage2.html.twig' %}
+{% block title %}Carrito de compras{% endblock %}
+{% block content %}
+    <div id="all">
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- breadcrumb-->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                                <li aria-current="page" class="breadcrumb-item active">Carrito de compras</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div id="basket" class="col-lg-9">
+                        <div class="box">
+                            <h1>Carrito</h1>
+                            <p class="text-muted">Actualmente tienes (<span class="artQuantity">{{ totalArticulos }}</span>) articulos</p>
+                            {% if carrito is not null %}
+                            <div class="table-responsive" style="max-height:350px">
+                                <table class="table table-hover" style="overflow: auto">
+                                    <thead class="thead-light">
+                                    <tr class="text-center small">
+                                        <th><i class="fa-solid fa-trash text-secondary"></i></th>
+                                        <th colspan="2">Articulo</th>
+                                        <th>Cantidad</th>
+                                        <th>Talla</th>
+                                        <th>Precio</th>
+                                        <th>Descuento</th>
+                                        <th colspan="2">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="text-center small"> 
+                                    {% for item in carrito.registros %}
+                                    <tr id="item-{{ item.id }}">
+                                        <td>
+                                            <button class="btn text-danger delete" data-id="{{ item.id }}" id="btnDelete-{{ item.id }}"><i class="fa-sharp fa-solid fa-square-minus"></i></button>
+                                            <div class="spinner-border text-danger small d-none" role="status" id="load-{{ item.id }}">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </td>
+                                        <td><a href="{{ url('frontend_articulo_detalles', {'urlAmigable': item.articulo.urlAmigable}) }}"><img src="{{ item.articulo.fotografiaPrincipal.getWebThumbnailNombreArchivo }}" alt="White Blouse Armani"></a></td>
+                                        <td>
+                                            <button class="btn btn-link btn-sm" data-toggle="tooltip" data-placement="top" data-bs-custom-class="custom-tooltip" data-title="This top tooltip is themed via CSS variables.">
+                                                {{ item.articulo.descripcion|length > 20 ? item.articulo.descripcion|slice(0,20) ~ '...' : item.articulo.descripcion}}
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-sm mb-3 mt-4">
+                                                <select class="form-select quantity" id="inputGroupSelect01" data-id="{{ item.id }}">
+                                                    <option disabled selected>Cantidad</option>
+                                                    {% if item.articulo.sobrePedido == true %}
+                                                        {% set cantidadMaxima = 5 %}
+                                                    {% else %}
+                                                        {% set cantidadMaxima = item.articuloTalla.existencia %}
+                                                    {% endif %}
+                                                    {% for i in 1 .. cantidadMaxima %}
+                                                        <option value="{{ i }}" {{ i == item.cantidad ? 'selected' }}>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.articuloTalla.talla.nombre }}</td>
+                                        <td>{{ '$' ~ item.articulo.precio1|number_format(2) }}</td>
+                                        <td>{{ '$' ~ item.descuento|number_format(2)|default(0.00)}}</td>
+                                        <td>$<span id="totalRegistro-{{ item.id }}">{{ item.total|number_format(2)}}</span></td>
+                                        <td><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="7">Subtotal</th>
+                                        <th colspan="2">$<span class="subtotal">{{ carrito.total|number_format(2) }}</span></th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive-->
+                            <div class="box-footer d-flex justify-content-between flex-column flex-lg-row">
+                                <div class="left"><a href="{{ url('frontend_home_page') }}" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i> Continuar comprando</a></div>
+                                <div class="right">
+                                    <a href="{{ url('front_carrito_seleccionar_direccion', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}" class="btn btn-primary">Proceder al pago <i class="fa fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                            {% else %}
+                                <span class="text-secondary">Tu carrito esta vacio</span>
+                            {% endif %}
+                        </div>
+                        <!-- /.box-->
+                        <div class="row same-height-row">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="box same-height">
+                                    <h3>You may also like these products</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="product same-height">
+                                    <div class="flip-container">
+                                        <div class="flipper">
+                                            <div class="front"><a href="detail.html"><img src="img/product2.jpg" alt="" class="img-fluid"></a></div>
+                                            <div class="back"><a href="detail.html"><img src="img/product2_2.jpg" alt="" class="img-fluid"></a></div>
+                                        </div>
+                                    </div><a href="detail.html" class="invisible"><img src="img/product2.jpg" alt="" class="img-fluid"></a>
+                                    <div class="text">
+                                        <h3>Fur coat</h3>
+                                        <p class="price">$143</p>
+                                    </div>
+                                </div>
+                                <!-- /.product-->
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="product same-height">
+                                    <div class="flip-container">
+                                        <div class="flipper">
+                                            <div class="front"><a href="detail.html"><img src="img/product1.jpg" alt="" class="img-fluid"></a></div>
+                                            <div class="back"><a href="detail.html"><img src="img/product1_2.jpg" alt="" class="img-fluid"></a></div>
+                                        </div>
+                                    </div><a href="detail.html" class="invisible"><img src="img/product1.jpg" alt="" class="img-fluid"></a>
+                                    <div class="text">
+                                        <h3>Fur coat</h3>
+                                        <p class="price">$143</p>
+                                    </div>
+                                </div>
+                                <!-- /.product-->
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="product same-height">
+                                    <div class="flip-container">
+                                        <div class="flipper">
+                                            <div class="front"><a href="detail.html"><img src="img/product3.jpg" alt="" class="img-fluid"></a></div>
+                                            <div class="back"><a href="detail.html"><img src="img/product3_2.jpg" alt="" class="img-fluid"></a></div>
+                                        </div>
+                                    </div><a href="detail.html" class="invisible"><img src="img/product3.jpg" alt="" class="img-fluid"></a>
+                                    <div class="text">
+                                        <h3>Fur coat</h3>
+                                        <p class="price">$143</p>
+                                    </div>
+                                </div>
+                                <!-- /.product-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-lg-9-->
+                    {% if carrito is not null %}
+                    <div class="col-lg-3">
+                        <div id="order-summary" class="box">
+                            <div class="box-header">
+                                <h3 class="mb-0">Resumen de la compra</h3>
+                            </div>
+                            <p class="text-muted">Los costos extras son calculados en base a tu compra</p>
+                            <div class="table-responsive">
+                                <table class="table table-small">
+                                    <tbody class="small">
+                                    <tr>
+                                        <td>Subtotal</td>
+                                        <th>$<span class="subtotal">{{ carrito.total|number_format(2) }}</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td>Descuento</td>
+                                        <th>$<span class="descuento">{{ carrito.descuento ? carrito.descuento|number_format(2) : '0.00' }}</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td>Envio</td>
+                                        <th>$<span class="envio">{{ carrito.envio|number_format(2) }}</span></th>
+                                    </tr>
+                                    <tr class="total">
+                                        <td>Total</td>
+                                        <th>$<span class="totalConEnvio">{{ carrito.totalConEnvio|number_format(2) }}</span></th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="mb-0">Codigo de descuento</h4>
+                            </div>
+                            <p class="text-muted">Si tienes un codigo, por favor ingresalo para aplicar tu promoción.</p>
+                            <form>
+                                <div class="input-group">
+                                    <input type="text" class="form-control"><span class="input-group-append">
+                                    <button type="button" class="btn btn-primary"><i class="fa fa-gift"></i></button></span>
+                                </div>
+                                <!-- /input-group-->
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /.col-md-3-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.delete').click(function(e){
+            item = $(this).attr('data-id');
+            url = "{{ url('front_carrito_eliminar_articulo', {'user_uid' : app.user.uid, 'crypt' : app.user.crypt, 'documento_registro_id' : 'element' }) }}";
+            urlOk = url.replace('element', item);
+            $.ajax({
+                type: "POST",
+                url: urlOk,
+                beforeSend: function (s) {
+                    $('#load-' + item).removeClass('d-none');
+                    $('#btnDelete-' + item).addClass('d-none');
+                },
+                success: function (s) {
+                    rs = JSON.parse(s);
+                    if (rs.type == 'success') {
+                        setTimeout(function(){
+                            showFlotante('Articulo eliminado <i class="fa-solid fa-trash fa-bounce"  style=" --fa-bounce-start-scale-x: 1; --fa-bounce-start-scale-y: 1; --fa-bounce-jump-scale-x: 1; --fa-bounce-jump-scale-y: 1; --fa-bounce-land-scale-x: 1; --fa-bounce-land-scale-y: 1; "></i>');
+                        }, 2000);
+                        setTimeout(function(){
+                            $('#item-' + item ).remove();
+                            $('.subtotal').text(rs.total);
+                            $('.envio').text(rs.envio);
+                            $('.totalConEnvio').text(rs.totalConEnvio);
+                            $('.artQuantity').text(rs.cantidadArticulos);
+                        }, 2500);
+                        setTimeout(hideFlotante, 3500);
+                    } else {
+                        $('#load-'+ item).addClass('d-none');
+                        $('#btnDelete-' + item).removeClass('d-none');
+                        $('#load-' + item).addClass('d-none');
+                        Swal.fire({title: "Oops", text: rs.message, timer: 2000, icon: "error", button: false, });
+                    }
+                },
+                error: function (s) {
+                    $('#btnDelete-' + item).removeClass('d-none');
+                    $('#load-' + item).addClass('d-none');
+                    $(this).addClass('d-none');
+                    Swal.fire({title: "Oops", text: 'Error en la peticion', timer: 3000, icon: "error", button: false, });
+                }
+            });
+        });
+        $('.quantity').change(function(e){
+            e.preventDefault();
+            item = $(this).attr('data-id');
+            cantidad = $(this).val();
+            url = "{{ url('front_carrito_actualizar_cantidad', {'user_uid' : app.user.uid, 'crypt' : app.user.crypt, 'documento_registro_id' : 'element' }) }}";
+            urlOk = url.replace('element', item);
+            $.ajax({
+                type: "GET",
+                url: urlOk,
+                data: {'cantidad' : cantidad},
+                beforeSend: function (s) {
+                    $('#load-' + item).removeClass('d-none');
+                    $('#btnDelete-' + item).addClass('d-none');
+                },
+                success: function (s) {
+                    rs = JSON.parse(s);
+                    if (rs.type == 'success') {
+                        $('#totalRegistro-' + item).text(rs.totalRegistro);
+                        setTimeout(function(){
+                            showFlotante('Cantidad actualizada <i class="fa-solid fa-badge-check fa-bounce"  style=" --fa-bounce-start-scale-x: 1; --fa-bounce-start-scale-y: 1; --fa-bounce-jump-scale-x: 1; --fa-bounce-jump-scale-y: 1; --fa-bounce-land-scale-x: 1; --fa-bounce-land-scale-y: 1; "></i>');
+                        }, 1500);
+                        setTimeout(function(){
+                            $('.subtotal').text(rs.total);
+                            $('.envio').text(rs.envio);
+                            $('.totalConEnvio').text(rs.totalConEnvio);
+                            $('.artQuantity').text(rs.cantidadArticulos);
+                        }, 2000);
+                        setTimeout(hideFlotante, 2500);
+                    } else {
+                        Swal.fire({title: "Oops", text: rs.message, timer: 2000, icon: "error", button: false, });
+                    }
+                    $('#load-'+ item).addClass('d-none');
+                    $('#btnDelete-' + item).removeClass('d-none');
+                    $('#load-' + item).addClass('d-none');
+                },
+                error: function (s) {
+                    $('#btnDelete-' + item).removeClass('d-none');
+                    $('#load-' + item).addClass('d-none');
+                    $(this).addClass('d-none');
+                    Swal.fire({title: "Oops", text: 'Error en la peticion', timer: 3000, icon: "error", button: false, });
+                }
+            });
+        });
+    </script>
+{% endblock %}

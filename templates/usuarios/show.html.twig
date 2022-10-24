@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuarios{% endblock %}
+
+{% block body %}
+    <h1>Usuarios</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ usuario.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ usuario.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Usuario</th>
+                <td>{{ usuario.usuario }}</td>
+            </tr>
+            <tr>
+                <th>FechaHoraCreacion</th>
+                <td>{{ usuario.fechaHoraCreacion ? usuario.fechaHoraCreacion|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FechaHoraEdicion</th>
+                <td>{{ usuario.fechaHoraEdicion ? usuario.fechaHoraEdicion|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{{ usuario.activo ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('usuarios_index') }}">back to list</a>
+
+    <a href="{{ path('usuarios_edit', {'id': usuario.id}) }}">edit</a>
+
+    {{ include('usuarios/_delete_form.html.twig') }}
+{% endblock %}

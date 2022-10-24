@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('backend_subcategoria_eliminar', {'id': subcategoria.id}) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ subcategoria.id) }}">
+    <button class="btn btn-sm btn-danger">Eliminar</button>
+</form>

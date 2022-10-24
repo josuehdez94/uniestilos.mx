@@ -1,0 +1,91 @@
+{% extends 'Frontend/User/miCuenta.html.twig' %}
+{% block title %}Mis direcciones{% endblock %}
+{% block container %}
+    <div id="all">
+        <div id="content">
+            <div class="container">
+                <!-- breadcrumb-->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('front_user_micuenta', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}">Mi cuenta</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">Mis direcciones</li>
+                    </ol>
+                </nav>
+                {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+                    {% for message in messages %}
+                        <div class="col-md-8">
+                            <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                                <strong>{{label}}</strong>, {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <script>
+                        $("#flashMessage").fadeTo(7000, 500).slideUp(500, function () {
+                            $("#flashMessage").alert('close');
+                        });
+                    </script>
+                {% endfor %}
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                            <div class="icon"><i class="fas fa-plus fa-3x"></i></div>
+                            <h3><a href="{{ url('font_cliente_direccion_nueva', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Añadir dirección</a></h3>
+                            <small class="text-secondary mb-0">dirección de entrega para tus pedidos</small>
+                        </div>
+                    </div>
+                    {% for direccion in direcciones %}
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2">
+                        <div class="box d-flex flex-column justify-content-center mb-0 h-100">
+                            {% if app.user.direccionPrincipal is not null and app.user.direccionPrincipal.id == direccion.id %}
+                                <span class="small text-info">Dirección predeterminada</span>
+                            {% else %}
+                                <form method="POST" action="{{ url('front_cliente_direccion_elegir', {'uid': direccion.uid, 'crypt' : direccion.crypt }) }}">
+                                    <input type="hidden" name="token" value="{{ csrf_token(direccion.uid) }}"/>
+                                    <input type="submit" class="btn btn-sm btn-link" value="Establecer principal">
+                                </form>
+                            {% endif %}
+                            <div class="mt-2">
+                                <h5><a href="#">{{ direccion.nombreCompleto|capitalize }}</a></h5>
+                                <p class="mb-0"><small class="text-secondary">{{ direccion.direccionCompleta }}</small></p>
+                                <div class="mt-2 referencias">
+                                    <small class="text-secondary">Referencias: {{ direccion.referencias ? direccion.referencias : '-' }}</small>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-secondary">Instrucciones: {{ direccion.instrucionesEntrega ? direccion.instrucionesEntrega : '-' }}</small>
+                                </div>
+                            </div>
+                            <div class="text-right mt-3">
+                                <a class="btn btn-link" href="{{ url('front_cliente_direccion_editar', {'uid': direccion.uid, 'crypt' : direccion.crypt }) }}">Editar</a>
+                                {% if app.user.direccionPrincipal is not null and app.user.direccionPrincipal.id != direccion.id %}
+                                    <button class="btn btn-link text-danger eliminar" data-id="{{ direccion.id }}">Eliminar</button>
+                                    <form id="delete-{{ direccion.id }}" class="d-none" method="POST" action="{{ url('front_cliente_direccion_eliminar', {'uid': direccion.uid, 'crypt' : direccion.crypt }) }}">
+                                        <input type="hidden" name="token" value="{{ csrf_token(direccion.uid) }}"/>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-4">
+                        <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                            <div class="icon"><i class="fas fa-plus fa-3x"></i></div>
+                            <h3><a href="{{ url('font_cliente_direccion_nueva') }}">Añadir dirección</a></h3>
+                            <small class="text-secondary mb-0">dirección de entrega para tus pedidos</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.eliminar').click(function(e){
+            var id = $(this).attr('data-id');
+            $('#delete-' + id).submit();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'Frontend/ResetPassword/request.html.twig' %}
+
+{% block title %}Email de restablecimiento de contraseña enviado{% endblock %}
+
+{% block content %}
+     <div class="container">
+        <div class="alert alert-primary" role="alert">
+            <h5>Email enviado</h5>
+            <p>Un email de restablecimiento de contraseña a sido enviado, contiene un link para restablecer tu contraseña. El link expira en  {{ tokenLifetime|date('g') }} hora(s).</p>
+            <p>Si no recibiste el link intentalo de nuevo aqui <a href="{{ path('front_forgot_password_request') }}">Restablecer contraseña</a>.</p>
+        </div>
+     </div>
+{% endblock %}

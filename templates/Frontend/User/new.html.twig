@@ -1,0 +1,20 @@
+{% extends 'home_page/homePage2.html.twig' %}
+
+{% block title %}Nuevo usuario{% endblock %}
+
+{% block content %}
+    {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+        {% for message in messages %}
+            <div class="col-md-8">
+                <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                    <strong>{{label}}</strong>, {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {{ include('Frontend/User/_form.html.twig') }}
+
+{% endblock %}

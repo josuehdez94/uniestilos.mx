@@ -1,0 +1,8 @@
+{% extends 'backend/ResetPassword/request.html.twig' %}
+
+{% block title %}Email de restablecimiento de contraseña enviado{% endblock %}
+
+{% block content %}
+    <p>Un email de restablecimiento de contraseña a sido enviado, contiene un link para restablecer tu contraseña. El link expira en  {{ tokenLifetime|date('g') }} hora(s).</p>
+    <p>Si no recibiste el link intentalo de nuevo aqui <a href="{{ path('app_forgot_password_request') }}">restablecer contraseña</a>.</p>
+{% endblock %}

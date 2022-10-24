@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ClienteDireccion{% endblock %}
+
+{% block body %}
+    <h1>ClienteDireccion</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cliente_direccion.id }}</td>
+            </tr>
+            <tr>
+                <th>NombreCompleto</th>
+                <td>{{ cliente_direccion.nombreCompleto }}</td>
+            </tr>
+            <tr>
+                <th>Calle</th>
+                <td>{{ cliente_direccion.calle }}</td>
+            </tr>
+            <tr>
+                <th>NumeroExterior</th>
+                <td>{{ cliente_direccion.numeroExterior }}</td>
+            </tr>
+            <tr>
+                <th>NumeroInterior</th>
+                <td>{{ cliente_direccion.numeroInterior }}</td>
+            </tr>
+            <tr>
+                <th>CodigoPostal</th>
+                <td>{{ cliente_direccion.codigoPostal }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ cliente_direccion.telefono }}</td>
+            </tr>
+            <tr>
+                <th>InstrucionesEntrega</th>
+                <td>{{ cliente_direccion.instrucionesEntrega }}</td>
+            </tr>
+            <tr>
+                <th>Referencias</th>
+                <td>{{ cliente_direccion.Referencias }}</td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <td>{{ cliente_direccion.colonia }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cliente_direccion_index') }}">back to list</a>
+
+    <a href="{{ path('cliente_direccion_edit', {'id': cliente_direccion.id}) }}">edit</a>
+
+    {{ include('cliente_direccion/_delete_form.html.twig') }}
+{% endblock %}

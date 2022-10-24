@@ -1,0 +1,49 @@
+{% extends 'home_page/homePage2.html.twig' %}
+{% block title %}Carrito de compras{% endblock %}
+{% block content %}
+    <div id="all">
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    {# <divclass="col-lg-12">
+                        <!-- breadcrumb-->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Inicio</a>
+                                </li>
+                                <li aria-current="page" class="breadcrumb-item active">Mis compras</li>
+                            </ol>
+                        </nav>
+                    </div> #}
+                    <div class="col-lg-3">
+                        <!--*** CUSTOMER MENU ***-->
+                        <div class="card sidebar-menu">
+                            <div class="card-header">
+                                <h3 class="h4 card-title">Mi espacio</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul class="nav nav-pills flex-column">
+                                    <a href="{{ url('front_cliente_index_compra', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}" class="nav-link {{ seccion == 'compras' ? 'active' : 'text-primary' }}">
+                                        <i class="fa fa-list"></i>
+                                        Mis compras</a>
+                                    <a href="customer-wishlist.html" class="nav-link disabled {{ seccion == 'deseos' ? 'active' : 'text-secondary' }}">
+                                        <i class="fa fa-heart"></i>
+                                        Mi lista de deseos</a>
+                                    <a href="{{ url('front_user_micuenta', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}" class="nav-link {{ seccion == 'cuenta' ? 'active' : 'text-primary' }}" >
+                                        <i class="fa fa-user"></i>
+                                        Mi cuenta</a>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.col-lg-3-->
+                        <!-- *** CUSTOMER MENU END ***-->
+                    </div>
+                    <div id="customer-orders" class="col-lg-9">
+                        {% block container %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

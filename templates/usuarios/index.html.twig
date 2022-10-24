@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuarios index{% endblock %}
+
+{% block body %}
+    <h1>Usuarios index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Usuario</th>
+                <th>FechaHoraCreacion</th>
+                <th>FechaHoraEdicion</th>
+                <th>Activo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.usuario }}</td>
+                <td>{{ usuario.fechaHoraCreacion ? usuario.fechaHoraCreacion|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ usuario.fechaHoraEdicion ? usuario.fechaHoraEdicion|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ usuario.activo ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('usuarios_show', {'id': usuario.id}) }}">show</a>
+                    <a href="{{ path('usuarios_edit', {'id': usuario.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('usuarios_new') }}">Create new</a>
+{% endblock %}

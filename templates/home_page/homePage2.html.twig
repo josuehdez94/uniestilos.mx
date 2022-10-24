@@ -1,0 +1,22 @@
+{% extends 'base2.html.twig' %}
+{# {% block title %}Uniestilos{% endblock %} #}
+{% block body %}
+    <!-- header -->
+    {% block header %}
+       {{ render(controller(
+        'App\\Controller\\Frontend\\HomePageController::navbar', {'q' : app.request.get('q')}
+        )) }}
+    {% endblock %}
+    <!-- body -->
+    {% block content %}
+
+    {% endblock %}
+    <!-- footer -->
+    {% block footer %}
+      {{ render(controller(
+        'App\\Controller\\Frontend\\HomePageController::footer', {'q' : app.request.get('q')}
+      )) }}
+    {% endblock %}
+    
+    
+{% endblock %}

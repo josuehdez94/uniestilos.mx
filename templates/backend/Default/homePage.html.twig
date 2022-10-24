@@ -1,0 +1,824 @@
+{% extends 'backend/Default/base.html.twig' %}
+{% block title %}HomePage{% endblock %}
+
+{% block body %}
+    {# <!-- Sidebar -->
+    <div id="wrapper">
+
+    <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-paw"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Administrador <sup>2</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ url('backend_mi_perfil') }}">
+                <i class="fas fa-user-circle"></i>
+                <span>Mi perfil</span>
+            </a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Sistema
+        </div>
+        <!-- Nav Item - Articulos -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Productos Y Servicios</span>
+            </a>
+            <div id="collapseTwo" class="collapse {{ menu is defined and menu == "Articulos" ? 'show' }}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-light py-2 collapse-inner rounded">
+                    <a class="list-group-item list-group-item-action{{ list is defined and list == "Articulos" ? ' list-group-item-primary' }}" href="{{ url('backend_articulo_index') }}">
+                        <i class="far fa-gem"></i> Articulos
+                    </a>
+                    <a class="list-group-item list-group-item-action{{ list is defined and list == "Categorias" ? ' list-group-item-primary' }}" href="{{ url('backend_categoria_index') }}">
+                        <i class="fas fa-bookmark"></i> Categorias
+                    </a>
+                </div>
+            </div>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Heading -->
+        <div class="sidebar-heading">
+           Usuarios
+        </div>
+        <!-- Nav Item - Usuarios -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Administrar Usuarios</span>
+            </a>
+            <div id="collapseUtilities" class="collapse {{ menu is defined and menu == "Administracion usuarios" ? 'show' }}" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="list-group-item list-group-item-action{{ list is defined and list == "Restablecer password" ? ' list-group-item-primary' }}" href="{{ url('app_forgot_password_request') }}">
+                        <i class="fas fa-key"></i> Setear contraseñas
+                    </a>
+                    <a class="list-group-item list-group-item-action{{ list is defined and list == "Crear" ? ' list-group-item-primary' }}" href="{{ url('backend_user_nuevo') }}">
+                        <i class="fas fa-user"></i> Crear usuarios</a>
+                    </a>
+                    <a class="list-group-item list-group-item-action{{ list is defined and list == "Usuarios" ? ' list-group-item-primary' }}" href="{{ url('backend_user_index') }}">
+                        <i class="fas fa-user-edit"></i> Administrar usuarios</a>
+                    </a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content" >
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Topbar Search -->
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                           aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
+
+                <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                <li class="nav-item dropdown no-arrow d-sm-none">
+                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <!-- Dropdown - Messages -->
+                    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                         aria-labelledby="searchDropdown">
+                        <form class="form-inline mr-auto w-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small"
+                                       placeholder="Search for..." aria-label="Search"
+                                       aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+
+                <!-- Nav Item - Alerts -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell fa-fw"></i>
+                        <!-- Counter - Alerts -->
+                        <span class="badge badge-danger badge-counter">3+</span>
+                    </a>
+                    <!-- Dropdown - Alerts -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                         aria-labelledby="alertsDropdown">
+                        <h6 class="dropdown-header">
+                            Alerts Center
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-primary">
+                                    <i class="fas fa-file-alt text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 12, 2019</div>
+                                <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-success">
+                                    <i class="fas fa-donate text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 7, 2019</div>
+                                $290.29 has been deposited into your account!
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-warning">
+                                    <i class="fas fa-exclamation-triangle text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 2, 2019</div>
+                                Spending Alert: We've noticed unusually high spending for your account.
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                    </div>
+                </li>
+
+                <!-- Nav Item - Messages -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-envelope fa-fw"></i>
+                        <!-- Counter - Messages -->
+                        <span class="badge badge-danger badge-counter">7</span>
+                    </a>
+                    <!-- Dropdown - Messages -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                         aria-labelledby="messagesDropdown">
+                        <h6 class="dropdown-header">
+                            Message Center
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60"
+                                     alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold">
+                                <div class="text-truncate">Hi there! I am wondering if you can help me with a
+                                    problem I've been having.
+                                </div>
+                                <div class="small text-gray-500">Emily Fowler · 58m</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60"
+                                     alt="">
+                                <div class="status-indicator"></div>
+                            </div>
+                            <div>
+                                <div class="text-truncate">I have the photos that you ordered last month, how would
+                                    you like them sent to you?
+                                </div>
+                                <div class="small text-gray-500">Jae Chun · 1d</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60"
+                                     alt="">
+                                <div class="status-indicator bg-warning"></div>
+                            </div>
+                            <div>
+                                <div class="text-truncate">Last month's report looks great, I am very happy with the
+                                    progress so far, keep up the good work!
+                                </div>
+                                <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                     alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div>
+                                <div class="text-truncate">Am I a good boy? The reason I ask is because someone told
+                                    me that people say this to all dogs, even if they aren't good...
+                                </div>
+                                <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                    </div>
+                </li>
+
+                <div class="topbar-divider d-none d-sm-block"></div>
+
+                <!-- Nav Item - User Information -->
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ app.user.nombreCompleto }}</span>
+                        <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                    </a>
+                    <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                         aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{{ url('backend_mi_perfil') }}">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Mi Perfil
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item" href="{{ url('backend_change_contrasena', {'user_id': app.user.id }) }}">
+                            <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Cambiar contraseña
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url('app_logout') }}" >
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Cerrar sesión
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- start contenido  -->
+        <div class="mx-5">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <!--end contenido -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer font-small">
+        <!-- Footer Elements -->
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2020 - {{ "now"|date("Y") }} Copyright: JIHS
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer --> #}
+
+    <body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- preloader area start -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- preloader area end -->
+    <!-- page container area start -->
+    <div class="page-container">
+        <!-- sidebar menu area start -->
+        <div class="sidebar-menu">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <a href="index.html"><img src="assets/images/icon/logo.png" alt="logo"></a>
+                </div>
+            </div>
+            <div class="main-menu">
+                <div class="menu-inner">
+                    <nav>
+                        <ul class="metismenu" id="menu">
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
+                                <ul class="collapse">
+                                    <li><a href="index.html">ICO dashboard</a></li>
+                                    <li><a href="index2.html">Ecommerce dashboard</a></li>
+                                    <li><a href="index3.html">SEO dashboard</a></li>
+                                </ul>
+                            </li>
+                            <li class="{{ menu is defined and menu == "Articulos" ? 'active' : '' }}">
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-adn"></i><span>Articulos
+                                    </span></a>
+                                <ul class="collapse">
+                                    <li class="{{ list is defined and list == "Articulos" ? 'active' : '' }}"><a href="{{ url('backend_articulo_index') }}">Lista articulos</a></li>
+                                    <li class="{{ list is defined and list == "Categorias" ? 'active' : '' }}"><a  href="{{ url('backend_categoria_index') }}">Categorias</a></li>
+                                </ul>
+                            </li>
+                            <li class="{{ menu is defined and menu == "Administracion usuarios" ? 'active' : '' }}">
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-users"></i><span>Usuarios</span></a>
+                                <ul class="collapse">
+                                    <li class="{{ list is defined and list == "Restablecer password" ? 'active' : '' }}"><a href="{{ url('app_forgot_password_request') }}">Restablecer contraseñas</a></li>
+                                    <li class="{{ list is defined and list == "Crear" ? 'active' : '' }}"><a href="{{ url('backend_user_nuevo') }}">Nuevo usuario</a></li>
+                                    <li class="{{ list is defined and list == "Usuarios" ? 'active' : '' }}"><a href="{{ url('backend_user_index') }}">Lista de usuarios</a></li>
+                                </ul>
+                            </li>
+                            {# <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-palette"></i><span>UI Features</span></a>
+                                <ul class="collapse">
+                                    <li><a href="accordion.html">Accordion</a></li>
+                                    <li><a href="alert.html">Alert</a></li>
+                                    <li><a href="badge.html">Badge</a></li>
+                                    <li><a href="button.html">Button</a></li>
+                                    <li><a href="button-group.html">Button Group</a></li>
+                                    <li><a href="cards.html">Cards</a></li>
+                                    <li><a href="dropdown.html">Dropdown</a></li>
+                                    <li><a href="list-group.html">List Group</a></li>
+                                    <li><a href="media-object.html">Media Object</a></li>
+                                    <li><a href="modal.html">Modal</a></li>
+                                    <li><a href="pagination.html">Pagination</a></li>
+                                    <li><a href="popovers.html">Popover</a></li>
+                                    <li><a href="progressbar.html">Progressbar</a></li>
+                                    <li><a href="tab.html">Tab</a></li>
+                                    <li><a href="typography.html">Typography</a></li>
+                                    <li><a href="form.html">Form</a></li>
+                                    <li><a href="grid.html">grid system</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-slice"></i><span>icons</span></a>
+                                <ul class="collapse">
+                                    <li><a href="fontawesome.html">fontawesome icons</a></li>
+                                    <li><a href="themify.html">themify icons</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-table"></i>
+                                    <span>Tables</span></a>
+                                <ul class="collapse">
+                                    <li><a href="table-basic.html">basic table</a></li>
+                                    <li><a href="table-layout.html">table layout</a></li>
+                                    <li><a href="datatable.html">datatable</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="maps.html"><i class="ti-map-alt"></i> <span>maps</span></a></li>
+                            <li><a href="invoice.html"><i class="ti-receipt"></i> <span>Invoice Summary</span></a></li>
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layers-alt"></i> <span>Pages</span></a>
+                                <ul class="collapse">
+                                    <li><a href="login.html">Login</a></li>
+                                    <li><a href="login2.html">Login 2</a></li>
+                                    <li><a href="login3.html">Login 3</a></li>
+                                    <li><a href="register.html">Register</a></li>
+                                    <li><a href="register2.html">Register 2</a></li>
+                                    <li><a href="register3.html">Register 3</a></li>
+                                    <li><a href="register4.html">Register 4</a></li>
+                                    <li><a href="screenlock.html">Lock Screen</a></li>
+                                    <li><a href="screenlock2.html">Lock Screen 2</a></li>
+                                    <li><a href="reset-pass.html">reset password</a></li>
+                                    <li><a href="pricing.html">Pricing</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-exclamation-triangle"></i>
+                                    <span>Error</span></a>
+                                <ul class="collapse">
+                                    <li><a href="404.html">Error 404</a></li>
+                                    <li><a href="403.html">Error 403</a></li>
+                                    <li><a href="500.html">Error 500</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-align-left"></i> <span>Multi
+                                        level menu</span></a>
+                                <ul class="collapse">
+                                    <li><a href="#">Item level (1)</a></li>
+                                    <li><a href="#">Item level (1)</a></li>
+                                    <li><a href="#" aria-expanded="true">Item level (1)</a>
+                                        <ul class="collapse">
+                                            <li><a href="#">Item level (2)</a></li>
+                                            <li><a href="#">Item level (2)</a></li>
+                                            <li><a href="#">Item level (2)</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Item level (1)</a></li>
+                                </ul>
+                            </li> #}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- sidebar menu area end -->
+        <!-- main content area start -->
+        <div class"main-content">
+            <!-- header area start -->
+            <div class="sticky-top">
+                <div class="header-area">
+                    <div class="row align-items-center">
+                        <!-- nav and search button -->
+                        <div class="col-md-6 col-sm-8 clearfix">
+                            <div class="nav-btn pull-left">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="search-box pull-left">
+                            {#  <form action="#">
+                                    <input type="text" name="search" placeholder="Search..." required>
+                                    <i class="ti-search"></i>
+                                </form> #}
+                                {% block buscador %}{% endblock %}
+                            </div>
+                        </div>
+                        <!-- profile info & task notification -->
+                        <div class="col-md-6 col-sm-4 clearfix">
+                            <ul class="notification-area pull-right">
+                                <li id="full-view"><i class="ti-fullscreen"></i></li>
+                                <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
+                                <li class="dropdown">
+                                    <i class="ti-bell dropdown-toggle" data-toggle="dropdown">
+                                        <span>2</span>
+                                    </i>
+                                    <div class="dropdown-menu bell-notify-box notify-box">
+                                        <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
+                                        <div class="nofity-list">
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-key btn-danger"></i></div>
+                                                <div class="notify-text">
+                                                    <p>You have Changed Your Password</p>
+                                                    <span>Just Now</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-comments-smiley btn-info"></i></div>
+                                                <div class="notify-text">
+                                                    <p>New Commetns On Post</p>
+                                                    <span>30 Seconds ago</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-key btn-primary"></i></div>
+                                                <div class="notify-text">
+                                                    <p>Some special like you</p>
+                                                    <span>Just Now</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-comments-smiley btn-info"></i></div>
+                                                <div class="notify-text">
+                                                    <p>New Commetns On Post</p>
+                                                    <span>30 Seconds ago</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-key btn-primary"></i></div>
+                                                <div class="notify-text">
+                                                    <p>Some special like you</p>
+                                                    <span>Just Now</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-key btn-danger"></i></div>
+                                                <div class="notify-text">
+                                                    <p>You have Changed Your Password</p>
+                                                    <span>Just Now</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb"><i class="ti-key btn-danger"></i></div>
+                                                <div class="notify-text">
+                                                    <p>You have Changed Your Password</p>
+                                                    <span>Just Now</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="dropdown">
+                                    <i class="fa fa-envelope-o dropdown-toggle" data-toggle="dropdown"><span>3</span></i>
+                                    <div class="dropdown-menu notify-box nt-enveloper-box">
+                                        <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
+                                        <div class="nofity-list">
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img1.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">Hey I am waiting for you...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img2.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">When you can connect with me...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img3.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">I missed you so much...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img4.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">Your product is completely Ready...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img2.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">Hey I am waiting for you...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img1.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">Hey I am waiting for you...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="notify-item">
+                                                <div class="notify-thumb">
+                                                    <img src="assets/images/author/author-img3.jpg" alt="image">
+                                                </div>
+                                                <div class="notify-text">
+                                                    <p>Aglae Mayer</p>
+                                                    <span class="msg">Hey I am waiting for you...</span>
+                                                    <span>3:15 PM</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="settings-btn">
+                                    <i class="ti-settings"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- header area end -->
+            <div class="main-content-inner">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <!-- main content area end -->
+        <!-- footer area start-->
+        <footer>
+            <div class="footer-area">
+                <p>© Copyright 2018. All right reserved. Template by <a href="https://colorlib.com/wp/">Colorlib</a>.</p>
+                <div class="flotante d-none">
+                    <div class="spinner-grow text-ligth" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span class="text-ligth">Guardando...</span>
+                </div>
+            </div>
+        </footer>
+        <!-- footer area end-->
+    </div>
+    <!-- page container area end -->
+    <!-- offset area start -->
+    <div class="offset-area">
+        <div class="offset-close"><i class="ti-close"></i></div>
+        <ul class="nav offset-menu-tab">
+            <li><a class="active" data-toggle="tab" href="#activity">Activity</a></li>
+            <li><a data-toggle="tab" href="#settings">Settings</a></li>
+        </ul>
+        <div class="offset-content tab-content">
+            <div id="activity" class="tab-pane fade in show active">
+                <div class="recent-activity">
+                    <div class="timeline-task">
+                        <div class="icon bg1">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Rashed sent you an email</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg2">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Added</h4>
+                            <span class="time"><i class="ti-time"></i>7 Minutes Ago</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg2">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>You missed you Password!</h4>
+                            <span class="time"><i class="ti-time"></i>09:20 Am</span>
+                        </div>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg3">
+                            <i class="fa fa-bomb"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Member waiting for you Attention</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg3">
+                            <i class="ti-signal"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>You Added Kaji Patha few minutes ago</h4>
+                            <span class="time"><i class="ti-time"></i>01 minutes ago</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg1">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Ratul Hamba sent you an email</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                        <p>Hello sir , where are you, i am egerly waiting for you.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg2">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Rashed sent you an email</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg2">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Rashed sent you an email</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg3">
+                            <i class="fa fa-bomb"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Rashed sent you an email</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
+                        </p>
+                    </div>
+                    <div class="timeline-task">
+                        <div class="icon bg3">
+                            <i class="ti-signal"></i>
+                        </div>
+                        <div class="tm-title">
+                            <h4>Rashed sent you an email</h4>
+                            <span class="time"><i class="ti-time"></i>09:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="settings" class="tab-pane fade">
+                <div class="offset-settings">
+                    <h4>General Settings</h4>
+                    <div class="settings-list">
+                        <div class="s-settings">
+                            <div class="s-sw-title">
+                                <h5>Notifications</h5>
+                                <div class="s-swtich">
+                                    <input type="checkbox" id="switch1" />
+                                    <label for="switch1">Toggle</label>
+                                </div>
+                            </div>
+                            <p>Keep it 'On' When you want to get all the notification.</p>
+                        </div>
+                        <div class="s-settings">
+                            <div class="s-sw-title">
+                                <h5>Show recent activity</h5>
+                                <div class="s-swtich">
+                                    <input type="checkbox" id="switch2" />
+                                    <label for="switch2">Toggle</label>
+                                </div>
+                            </div>
+                            <p>The for attribute is necessary to bind our custom checkbox with the input.</p>
+                        </div>
+                        <div class="s-settings">
+                            <div class="s-sw-title">
+                                <h5>Show your emails</h5>
+                                <div class="s-swtich">
+                                    <input type="checkbox" id="switch3" />
+                                    <label for="switch3">Toggle</label>
+                                </div>
+                            </div>
+                            <p>Show email so that easily find you.</p>
+                        </div>
+                        <div class="s-settings">
+                            <div class="s-sw-title">
+                                <h5>Show Task statistics</h5>
+                                <div class="s-swtich">
+                                    <input type="checkbox" id="switch4" />
+                                    <label for="switch4">Toggle</label>
+                                </div>
+                            </div>
+                            <p>The for attribute is necessary to bind our custom checkbox with the input.</p>
+                        </div>
+                        <div class="s-settings">
+                            <div class="s-sw-title">
+                                <h5>Notifications</h5>
+                                <div class="s-swtich">
+                                    <input type="checkbox" id="switch5" />
+                                    <label for="switch5">Toggle</label>
+                                </div>
+                            </div>
+                            <p>Use checkboxes when looking for yes or no answers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

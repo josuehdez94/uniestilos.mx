@@ -1,0 +1,99 @@
+{% extends 'Frontend/Cliente/baseCliente.html.twig' %}
+{% block title %}Mis compras{% endblock %}
+{% set seccion = 'compras' %}
+{% block container %}
+<div class="col-lg-12">
+    <!-- breadcrumb-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ url('front_cliente_index_compra', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Mis compras</a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">Detalles {{ compra.folio }}</li>
+        </ol>
+    </nav>
+</div>
+<div class="box">
+	<h1>Compra ID #{{ compra.folio }}</h1>
+	<p class="lead text-primary">
+        {% if compra.pagado == true %}
+            {% if compra.enviado == true and compra.entregado == false %}
+                Entregada a paqueteria
+            {% elseif compra.enviado == true and compra.entregado == true %}
+                Entregada
+            {% elseif compra.enviado == false %}
+                En preparación
+            {% endif %}
+        {% else %}
+            Esperando confirmación del pago
+        {% endif %}
+    </p>
+	<p class="text-muted">Si tienes alguna pregunta o duda por favor contactanos a nuestro WhatsApp.</p>
+	<hr>
+	<div class="table-responsive mb-4">
+		<table class="table table-hover">
+			<thead class="thead-light text-center small">
+				<tr>
+					<th colspan="2">Articulo</th>
+					<th>Cantidad</th>
+					<th>Precio</th>
+					<th>Descuento</th>
+					<th>Subtotal</th>
+				</tr>
+			</thead>
+			<tbody class="text-center small">
+                {% for registro in compra.registros %}
+				<tr>
+					<td>
+						<a href="#"><img src="{{ registro.articulo.fotografiaPrincipal.getWebMiniThumbnailNombreArchivo }}" alt="White Blouse Armani"></a>
+					</td>
+					<td>
+						<a href="#">{{ registro.articulo.descripcion }}</a>
+					</td>
+					<td>{{ registro.cantidad }}</td>
+					<td>${{ registro.precio }}</td>
+					<td>${{ registro.descuento|default('0.00') }}</td>
+					<td>${{ registro.total }}</td>
+				</tr>
+                {% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<th colspan="5" class="text-right">Subtotal</th>
+					<th>${{ compra.total }}</th>
+				</tr>
+				<tr>
+					<th colspan="5" class="text-right">Envio</th>
+					<th>${{ compra.envio }}</th>
+				</tr>
+				<tr>
+					<th colspan="5" class="text-right">Descuentos</th>
+					<th>${{ compra.descuento|default('0.00') }}</th>
+				</tr>
+				<tr>
+					<th colspan="5" class="text-right">Total</th>
+					<th>${{ compra.totalConEnvio }}</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<!-- /.table-responsive-->
+	<div class="row addresses">
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			<h2>Dirección envio</h2>
+			<p>{{ compra.clienteDireccion.direccionCompleta }}</p>
+			<p>Recibe: {{ compra.clienteDireccion.nombreCompleto }}</p>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			<h2>Detalles del pago</h2>
+			<p><img src="{{ asset('assets/img/front/mercadoPago.png') }}" style="width:80px;height:80px"></p>
+            <p>Forma pago: {{ compra.pagos[0].formaPago }}</p>
+            <p>Id pago: {{ compra.pagos[0].paymentId }}</p>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

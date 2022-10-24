@@ -1,0 +1,139 @@
+{% extends 'backend/Articulo/indexArticulo.html.twig' %}
+{% block title %}detalles articulo{% endblock %}
+{% block buscador %}{% endblock %}
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_articulo_index') }}">Lista Articulos</a></li>
+                        <li><span>Detalles {{ articulo.sku }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h4>Detalles articulo <b>{{ articulo.descripcion ~ ' ' ~ '(' ~ articulo.sku ~ ')' }}</b></h4>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">General</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Fotografias</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Descripcion</a>
+        </li>
+    </ul>
+    <div class="tab-content mt-2" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="row mt-2">
+                <div class="col-10">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <td>{{ articulo.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Sku</th>
+                                <td>{{ articulo.sku }}</td>
+                            </tr>
+                            <tr>
+                                <th>Precio1</th>
+                                <td>{{ '$' ~ articulo.precio1 }}</td>
+                            </tr>
+                            <tr>
+                                <th>Precio2</th>
+                                <td>{{ '$' ~ articulo.precio2 }}</td>
+                            </tr>
+                            <tr>
+                                <th>Activo</th>
+                                <td>{{ articulo.activo ? 'Si' : 'No' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descripcion</th>
+                                <td>{{ articulo.descripcion }}</td>
+                            </tr>
+                            <tr>
+                                <th>UrlAmigable</th>
+                                <td>{{ articulo.urlAmigable }}</td>
+                            </tr>
+                            <tr>
+                                <th>Subcategoria > Categoria</th>
+                                <td>{{ articulo.subcategoria.nombre ~ ' > ' ~ articulo.subcategoria.categoria.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <small><b>Fecha hora creación:</b> {{ articulo.fechahoraCreacion ? articulo.fechahoraCreacion|date('Y-m-d H:i:s') : '' }} <b>por:</b> {{ articulo.usuarioCreador ? articulo.usuarioCreador.nombreCompleto : '-' }}</small>
+                                    <small><b>Fecha hora Edición:</b> {{ articulo.fechahoraEdicion ? articulo.fechahoraEdicion|date('Y-m-d H:i:s') : '' }} <b>por:</b> {{ articulo.usuarioEditor ? articulo.usuarioEditor.nombreCompleto : '-' }}</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 text-right">
+                    <a class="btn btn-sm btn-outline-primary" href="{{ path('backend_articulo_index') }}">Regresar</a>
+                    <a class="btn btn-sm btn-success" href="{{ path('backend_articulo_editar', {'id': articulo.id }) }}">Editar</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="row mt-2">
+                <div class="col-10">
+                    <div class="row">
+                    {% for fotografia in articulo.fotografias %}
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <img src="{{ fotografia.getWebThumbnailNombreArchivo }}" alt="..." class="img-thumbnail" style="width:200px;height:200px">
+                        </div>
+                    {% else %}
+                        <div class="col-lg-3">
+                            no hay fotografias
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-10 text-right">
+                    <a class="btn btn-sm btn-outline-primary" href="{{ path('backend_articulo_index') }}">Regresar</a>
+                    <a class="btn btn-sm btn-success" href="{{ path('backend_articulo_fotografia_editar', {'id': articulo.id }) }}">Editar</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="row mt-2">
+                {% if articulo.articuloDescripcion is not null %}
+                <div class="col-md-10">
+                    <div class="form-row align-items-center mt-2">
+                        <div class="col-12">
+                            {{ articulo.articuloDescripcion.descripcion|raw }}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                    <h4>No hay descripcion</h4>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-10">
+                    <p>
+                        <small><b>Fecha hora creación:</b> {{ articulo.articuloDescripcion ? articulo.articuloDescripcion.fechahoraCreacion|date('Y-m-d H:i:s') : '' }} <b>por:</b> {{ articulo.articuloDescripcion ? articulo.articuloDescripcion.usuarioCreador.nombreCompleto : '-' }}</small>
+                        <small><b>Fecha hora Edición:</b> {{ articulo.articuloDescripcion ? articulo.articuloDescripcion.fechahoraEdicion|date('Y-m-d H:i:s') : '' }} <b>por:</b> {{ articulo.articuloDescripcion ? articulo.articuloDescripcion.usuarioEditor.nombreCompleto : '-' }}</small>
+                    </p>
+                </div>
+                <div class="col-2 text-right">
+                    <a class="btn btn-sm btn-outline-primary" href="{{ path('backend_articulo_index') }}">Regresar</a>
+                    <a class="btn btn-sm btn-success" href="{{ path('backend_articulo_descripcion_editar', {'articulo_id': articulo.id }) }}">Editar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

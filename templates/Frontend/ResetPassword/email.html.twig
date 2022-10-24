@@ -1,0 +1,8 @@
+
+<p>Para restablecer tu contraseña de nicenmt da click en el siguiente link</p>
+
+<a href="{{ url('front_reset_password', {token: resetToken.token}) }}">{{ url('front_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Este link expira en {{ tokenLifetime|date('g') }} hour(s).</p>
+
+<p>Gracias!</p>

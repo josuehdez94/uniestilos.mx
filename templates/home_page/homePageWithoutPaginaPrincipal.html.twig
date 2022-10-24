@@ -1,0 +1,58 @@
+{% extends 'base2.html.twig' %}
+{% block title %}Nice NMT{% endblock %}
+
+{% block body %}
+{#<div id="root"></div>#}
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top pageColor">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand text-dark" href=""><img src="{{ asset('assets/img/front/logo.png') }}" width="70px" height="70px"></a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Joyeria y accesorios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Esencias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Productos comestibles</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+    <!-- Footer -->
+    <footer class="page-footer font-small pageColor">
+        <!-- Footer Elements -->
+        <div class="container">
+            <!-- Grid row-->
+            <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-12 py-3">
+                    <div class="footer-copyright text-center">
+                        <!-- Facebook -->
+                        <i class="fab fa-facebook text-primary" style="font-size: 3.5em"></i>
+                        <!--Instagram-->
+                        <i class="fab fa-instagram text-danger" style="font-size: 3.5em"></i>
+                    </div>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row-->
+        </div>
+        <!-- Footer Elements -->
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3 animated growIn">
+            © 2020 - {{ "now"|date("Y") }} Copyright: JIHS
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+{% endblock %}

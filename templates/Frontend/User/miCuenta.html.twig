@@ -1,0 +1,59 @@
+{% extends 'Frontend/Cliente/baseCliente.html.twig' %}
+{% block title %}Mi cuenta{% endblock %}
+{% set seccion = 'cuenta' %}
+{% block container %}
+<div class="col-lg-12">
+    <!-- breadcrumb-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ url('frontend_home_page') }}">Inicio</a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">Mi cuenta</li>
+        </ol>
+    </nav>
+</div>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                <div class="icon"><i class="fas fa-map-marked fa-2x"></i></div>
+                <h3><a href="{{ url('front_cliente_direccion_index', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Direcciones</a></h3>
+                <p class="mb-0">Administra tus direcciones de entrega</p>
+            </div>
+        </div>
+        {# <div class="col-md-4">
+            <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                <div class="icon"><i class="far fa-credit-card fa-2x"></i></div>
+                <h3><a href="#">Metodos de pago</a></h3>
+                <p class="mb-0">Administra tus metodos de pago</p>
+            </div>
+        </div> #}
+        <div class="col-md-6">
+            <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                <div class="icon"><i class="fas fa-shield-alt fa-2x"></i></div>
+                <h3><a href="{{ url('front_cliente_security', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Seguridad</a></h3>
+                <p class="mb-0">Administra tus contraseñas</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                <div class="icon"><i class="fas fa-box fa-2x"></i></div>
+                <h3><a href="{{ url('front_cliente_index_compra', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Mis compras</a></h3>
+                <p class="mb-0">Detalles de las compras que realizaste</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
+                <div class="icon"><i class="fas fa-heartbeat fa-2x"></i></div>
+                <h3><a href="#">Mis lista de deseos</a></h3>
+                <p class="mb-0">Revisa tus articulos que deseas adquirir.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

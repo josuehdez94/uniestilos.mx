@@ -1,0 +1,98 @@
+{% if articulo.tallas|length > 0 %}
+    {% set tallasActivas = false %}
+    {% for talla in articulo.tallas %}
+        {% if talla.activa == true and talla.existencia > 0 %}
+            {% set tallasActivas = true %}
+        {% endif %}
+    {% endfor %}
+    {% if tallasActivas == true or articulo.sobrePedido == true %}
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
+        {{ form_start(form, {'id': 'agregar_articulo_carrito', 'attr' : {'class' : 'addCart'}}) }}
+        <div class="form-row container">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="text-secondary">Talla</span>
+                {{ form_widget(form.articuloTalla) }}
+                {{ form_errors(form.articuloTalla) }}
+                {{ form_widget(form.precio) }}
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="text-secondary">Cantidad</span>
+                {{ form_widget(form.cantidad) }}
+                {{ form_errors(form.cantidad) }}
+            </div>
+        </div>
+        <div class="text-center buttons mt-2">
+            {{ form_widget(form.agregar) }}
+            {# <input type="hidden" name="articulo" value="{{ articulo.id }}"/>
+            <input type="hidden" name="token" value="{{ csrf_token(articulo.urlAmigable) }}"/> #}
+            {# {% if app.user is not null %}
+            <button type="submit" class="btn btn-primary mt-1"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+            {% else %}
+            <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#modalIniciarSesion"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+            {% endif %} #}
+            {#<a href="basket.html" class="btn btn-outline-primary"><i class="fa fa-heart"></i> Add to wishlist</a>
+            <script
+                src="https://www.mercadopago.com.mx/integrations/v1/web-payment-checkout.js"
+                data-preference-id="{{ preference.id }}">
+            </script>
+            <script>
+                $( document ).ready(function() {
+                    $('.mercadopago-button').html('Comprar Ahora');
+                    $('.mercadopago-button').addClass('btn btn-sm btn-');
+                });
+            </script>#}
+        </div>
+        <script>
+            $( document ).ready(function() {
+                existencia = $( ".sizes option:selected" ).attr('data-id');
+                crearCantidad(existencia);
+            });
+            $('.sizes').change(function(e){
+                e.preventDefault();
+                existencia = $( ".sizes option:selected" ).attr('data-id');
+                crearCantidad(existencia);
+                $('.stock').text(existencia + ' Disponibles');
+            });
+            function crearCantidad(existencia){
+                $('.quantity').empty();
+                for (var i=1; i<=existencia; i++) {
+                    $('.quantity').append($('<option>', {
+                        value: i,
+                        text: i
+                    }));
+                }
+            }
+            $( '.addCart' ).submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('front_carrito_agregar_articulo', {'user_uid': app.user.uid, 'crypt': app.user.crypt, 'articulo_id': articulo.id }) }}",
+                    data: $(this).serialize(),
+                    success: function(e) {
+                        rs = JSON.parse(e);
+                        if(rs.type == 'success'){
+                            url = "{{ url('front_carrito_articulo_agregado', {'articulo_urlAmigable': articulo.urlAmigable}) }}"
+                            $(location).attr('href',url);  
+                        }else if(rs.type == 'error'){
+                            Swal.fire({title: "Error!",text: rs.message, timer: 2500, icon: "error",button: false,});
+                        }else{
+                            $('.formCarrito').html(rs.content);
+                        }
+                    },
+                    error: function(e) {
+                        Swal.fire({title: "Opss!",text: "Error al cargar formulario", timer: 2000, icon: "error",button: false,});
+                    }
+                });
+            });                                         
+        </script>
+        {{ form_end(form) }}
+    {% else %}
+        <div class="alert alert-info">
+            Este articulo actualmente se encuentra sin stock, disculpa las molestias
+        </div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-info">
+        Este articulo no esta disponible para venta
+    </div>
+{% endif %}

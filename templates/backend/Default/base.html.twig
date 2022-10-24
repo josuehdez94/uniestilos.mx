@@ -1,0 +1,81 @@
+<!doctype html>
+<html class="no-js" lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}Backend!{% endblock %}</title>
+    {% block stylesheets %}
+        {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+        {#  {{ encore_entry_link_tags('app') }} #}
+        {# <link rel="stylesheet" href="{{ asset('assets/css/base.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/Backend/sb-admin-2.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/fontawesome.css') }}"> #}
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/themify-icons.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/metisMenu.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/slicknav.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/Backend/principal.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+        {# <link rel="stylesheet" href="{{ asset('assets/css/Boostrap/css/bootstrap.min.css') }}"> #}
+        {# <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> #}
+        <!-- amchart css -->
+        <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+        <!-- others css -->
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/typography.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/default-css.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/styles.css') }}" >
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/responsive.css') }}">
+    {% endblock %}
+    {% block javascripts %}
+        {# <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> #}
+        <script src="{{ asset('srtdash/assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+        <!-- Core plugin JavaScript-->
+        {# <script src="{{ asset('assets/js/jquery-easing/jquery.easing.compatibility.js') }}"></script> #}
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+        {# {{ encore_entry_script_tags('app') }} #}
+        {# <script src="{{ asset('build/app.js') }}"></script> #}
+    {% endblock %}
+ </head>
+<body>
+    {% block body %}
+    {% endblock %}
+    <!-- offset area end -->
+    <!-- jquery latest version -->
+    <script src="{{ asset('srtdash/assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
+    <!-- bootstrap 4 js -->
+    <script src="{{ asset('srtdash/assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('srtdash/assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('srtdash/assets/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('srtdash/assets/js/metisMenu.min.js') }}"></script>
+    <script src="{{ asset('srtdash/assets/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('srtdash/assets/js/jquery.slicknav.min.js') }}"></script>
+    <script src="{{ asset('assets/js/Backend/principal.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- start chart js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!-- start highcharts js -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- start zingchart js -->
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script>
+    zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
+    </script>
+    <!-- all line chart activation -->
+    <script src="{{ asset('srtdash/assets/js/line-chart.js') }}"></script>
+    <!-- all pie chart -->
+    <script src="{{ asset('srtdash/assets/js/pie-chart.js') }}"></script>
+    <!-- others plugins -->
+    <script src="{{ asset('srtdash/assets/js/plugins.js') }}"></script>
+    <script src="{{ asset('srtdash/assets/js/scripts.js') }}"></script>
+</body>
+</html>

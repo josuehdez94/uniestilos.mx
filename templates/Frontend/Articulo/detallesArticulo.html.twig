@@ -1,0 +1,230 @@
+{% extends 'home_page/homePage2.html.twig' %}
+
+{% block title %}detalles articulo {{articulo.sku}} {% endblock %}
+{% block content %}
+    <script src="{{ asset('js/jquery.zoom.js') }}"></script>
+    <div id="all">
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                   <div class="col-lg-3 order-2 order-lg-1">
+                        <!--
+                        *** MENUS AND FILTERS ***
+                        _________________________________________________________
+                        -->
+                         {#<div class="card sidebar-menu mb-4">
+                            <div class="card-header">
+                                <h3 class="h4 card-title">Categories</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul class="nav nav-pills flex-column category-menu">
+                                    <li><a href="category.html" class="nav-link">Men <span class="badge badge-secondary">42</span></a>
+                                        <ul class="list-unstyled">
+                                            <li><a href="category.html" class="nav-link">T-shirts</a></li>
+                                            <li><a href="category.html" class="nav-link">Shirts</a></li>
+                                            <li><a href="category.html" class="nav-link">Pants</a></li>
+                                            <li><a href="category.html" class="nav-link">Accessories</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="category.html" class="nav-link active">Ladies  <span class="badge badge-light">123</span></a>
+                                        <ul class="list-unstyled">
+                                            <li><a href="category.html" class="nav-link">T-shirts</a></li>
+                                            <li><a href="category.html" class="nav-link">Skirts</a></li>
+                                            <li><a href="category.html" class="nav-link">Pants</a></li>
+                                            <li><a href="category.html" class="nav-link">Accessories</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="category.html" class="nav-link">Kids  <span class="badge badge-secondary">11</span></a>
+                                        <ul class="list-unstyled">
+                                            <li><a href="category.html" class="nav-link">T-shirts</a></li>
+                                            <li><a href="category.html" class="nav-link">Skirts</a></li>
+                                            <li><a href="category.html" class="nav-link">Pants</a></li>
+                                            <li><a href="category.html" class="nav-link">Accessories</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>#}
+                        <!-- *** MENUS AND FILTERS END ***-->
+                    </div>
+                    <div class="col-lg-9 order-1 order-lg-2">
+                        <div class="col-lg-12">
+                            <!-- breadcrumb-->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                                    <li class="breadcrumb-item"><a href="#">Categoria</a></li>
+                                    <li aria-current="page" class="breadcrumb-item active">{{ articulo.descripcion }}</li>
+                                </ol>
+                            </nav>
+                        </div>
+                        {#<div id="productMain" class="row">
+                            <div class="col-md-6">
+                                <div data-slider-id="1" class="owl-carousel shop-detail-carousel">
+                                    <div class="item"> <img src="img/detailbig1.jpg" alt="" class="img-fluid"></div>
+                                    <div class="item"> <img src="img/detailbig2.jpg" alt="" class="img-fluid"></div>
+                                    <div class="item"> <img src="img/detailbig3.jpg" alt="" class="img-fluid"></div>
+                                </div>
+                                <div class="ribbon sale">
+                                    <div class="theribbon">SALE</div>
+                                    <div class="ribbon-background"></div>
+                                </div>
+                                <!-- /.ribbon-->
+                                <div class="ribbon new">
+                                    <div class="theribbon">NEW</div>
+                                    <div class="ribbon-background"></div>
+                                </div>
+                                <!-- /.ribbon-->
+                            </div>
+                            <div class="col-md-6">
+                                <div class="box">
+                                    <h1 class="text-center">White Blouse Armani</h1>
+                                    <p class="goToDescription"><a href="#details" class="scroll-to">Scroll to product details, material &amp; care and sizing</a></p>
+                                    <p class="price">$124.00</p>
+                                    <p class="text-center buttons"><a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Add to cart</a><a href="basket.html" class="btn btn-outline-primary"><i class="fa fa-heart"></i> Add to wishlist</a></p>
+                                </div>
+                                <div data-slider-id="1" class="owl-thumbs">
+                                    <button class="owl-thumb-item"><img src="img/detailsquare.jpg" alt="" class="img-fluid"></button>
+                                    <button class="owl-thumb-item"><img src="img/detailsquare2.jpg" alt="" class="img-fluid"></button>
+                                    <button class="owl-thumb-item"><img src="img/detailsquare3.jpg" alt="" class="img-fluid"></button>
+                                </div>
+                            </div>
+                        </div>#}
+                        <div id="productMain" class="row">
+                            <div class="col-md-6" data-aos="flip-down">
+                                {#<div class="col-lg-8 col-xs-12 col-centered" data-aos="zoom-out-right">#}
+                                    <div class="card" style="max-width:680px;max-height:350px">
+                                        <style>
+                                            /* magnifying glass icon */
+                                            .zoom:after {
+                                            content:'';display:block; width:33px; height:33px; position:absolute; top:0;right:0;background:url("{{asset('assets/img/front/icon.png')}}");
+                                            }
+                                            #imagenPrincipal img:hover { cursor: url("{{asset('assets/img/front/grab.cur')}}"), default; }
+                                            #imagenPrincipal img:active { cursor:url("{{asset('assets/img/front/grabbed.cur')}}"), default; }
+                                        </style>
+                                        <span class='zoom' id='imagenPrincipal'>
+                                            <img src="{{ articulo.fotografiaPrincipal ? articulo.fotografiaPrincipal.getWebNombreArchivo : asset('assets/img/noImage.png') }}" class="card-img-top" alt="..." id="imagenPrincipal-{{ articulo.id }}" style="max-width:650px;height:320px">
+                                        </span>
+                                        <script>
+                                            $(document).ready(function(){        
+                                                var imagenPrincipal = $('#imagenPrincipal-{{ articulo.id }}').attr('src');
+                                                $('#imagenPrincipal').zoom({url: imagenPrincipal});
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="card border-light mb-3">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                {% for foto in articulo.fotografias %}
+                                                <div class="col-2 mr-2 ml-2">
+                                                    <img src="{{ foto.getWebThumbnailNombreArchivo }}" class="card-img-top" alt="..." id="imagenChange-{{foto.id}}" style="height: 60px; width: 90px">
+                                                        <script>
+                                                        $( "#imagenChange-{{foto.id}}" ).click(function() {
+                                                            var url = "{{ foto.getWebNombreArchivo }}";
+                                                            $('#imagenPrincipal-{{ articulo.id }}').attr('src', url);
+                                                            $('img[class="zoomImg"]').attr('src', url);
+                                                        });
+                                                    </script>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {#</div>#}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="box" data-aos="zoom-out-right">
+                                    <h4 class="text-center">{{ articulo.descripcion }}</h4>
+                                    <p class="goToDescription text-secondary"><span>Sku: </span>{{ articulo.sku }}</p>
+                                    <small class="text-primary stock">
+                                        {% if articulo.sobrePedido == true %}
+                                            Este articulo solo esta disponible sobre pedido, el tiempo para que te llegue es de 5-7 dias habiles
+                                        {% else %}
+                                            {% set existencia = 0 %}
+                                        {% for articuloTalla in articulo.Tallas %}
+                                            {% if articuloTalla.activa == true and articuloTalla.existencia > 0 %}
+                                                {% if loop.first %}
+                                                    {{ articuloTalla.existencia ~ ' Disponibles ' }}
+                                                    {% set existencia = articuloTalla.existencia %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% endif %}
+                                    </small>
+                                    <div class="price">
+                                        <input type="hidden" name="precio" value="{{ articulo.precio1 }}">
+                                        {{ articulo.precio1 is not null ? '$' ~ articulo.precio1 : 'Este articulo aun no cuenta con precio'}}
+                                    </div>
+                                    <div class="formCarrito">
+                                        {% if app.user is not null %}
+                                            <script>
+                                                $( document ).ready(function() {
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: "{{ url('front_carrito_agregar_articulo', {'user_uid': app.user.uid, 'crypt': app.user.crypt, 'articulo_id': articulo.id }) }}",
+                                                        success: function(e) {
+                                                            rs = JSON.parse(e);
+                                                            if(rs.type == 'load'){
+                                                                $('.formCarrito').html(rs.content);
+                                                            }else if(rs.type == 'error'){
+                                                                Swal.fire({title: "Error!",text: rs.message, timer: 2500, icon: "error",button: false,});
+                                                            }
+                                                        },
+                                                        error: function(e) {
+                                                            Swal.fire({title: "Opss!",text: "Error al cargar formulario", timer: 2000, icon: "error",button: false,});
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        {% else %}
+                                        <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#modalIniciarSesion"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div data-slider-id="1" class="owl-thumbs">
+                                    <button class="owl-thumb-item"><img src="img/detailsquare.jpg" alt="" class="img-fluid"></button>
+                                    <button class="owl-thumb-item"><img src="img/detailsquare2.jpg" alt="" class="img-fluid"></button>
+                                    <button class="owl-thumb-item"><img src="img/detailsquare3.jpg" alt="" class="img-fluid"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="details" class="box">
+                            {% if articulo.articuloDescripcion is not null %}
+                                {{ articulo.articuloDescripcion.descripcion|raw }}
+                            {% endif %}
+                            {# <div class="social">
+                                <h4>Show it to your friends</h4>
+                                <p><a href="#" class="external facebook"><i class="fa fa-facebook"></i></a><a href="#" class="external gplus"><i class="fa fa-google-plus"></i></a><a href="#" class="external twitter"><i class="fa fa-twitter"></i></a><a href="#" class="email"><i class="fa fa-envelope"></i></a></p>
+                            </div> #}
+                        </div>
+                        
+                    </div>
+                    <!-- /.col-md-9-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalIniciarSesion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Inicia sesión</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <a href="{{ url('app_login_client') }}">Inicia sesión</a> ó <a href="{{ url('front_user_nuevo') }}">registrate</a> para poder agregar articulos al carrito
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{{ asset('js/animate.js') }}"></script>
+    <script>
+        AOS.init();
+    </script>
+{% endblock %}

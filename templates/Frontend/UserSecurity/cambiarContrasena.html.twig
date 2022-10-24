@@ -1,0 +1,32 @@
+{% extends 'Frontend/User/miCuenta.html.twig' %}
+
+{% block title %}Cambia tu contraseña{% endblock %}
+
+{% block content %}
+<div id="all">
+    <div id="content">
+        <div class="container">
+            <!-- breadcrumb-->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('front_user_micuenta', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}">Mi cuenta</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('front_cliente_security', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Seguridad</a></li>
+                    <li aria-current="page" class="breadcrumb-item active">Cambiar contraseña</li>
+                </ol>
+            </nav>
+
+            <h1>Cambia tu contraseña</h1>
+
+            {% form_theme resetForm 'bootstrap_4_layout.html.twig' %}
+            {{ form_start(resetForm) }}
+                {{ form_row(resetForm.oldPassword) }}
+                {{ form_row(resetForm.plainPassword) }}
+                <div class="text-right">
+                    <button class="btn btn-primary">Cambiar contraseña</button>
+                </div>
+            {{ form_end(resetForm) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

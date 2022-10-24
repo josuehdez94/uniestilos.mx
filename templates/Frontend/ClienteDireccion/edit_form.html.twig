@@ -1,0 +1,164 @@
+<div id="all">
+    <div id="content">
+        <div class="container">
+           
+                <!-- breadcrumb-->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('front_user_micuenta', {'user_uid': app.user.uid, 'crypt': app.user.crypt}) }}">Mi cuenta</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('front_cliente_direccion_index', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Direcciones</a></li>
+                        <li class="breadcrumb-item"><a href="">Editando</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">{{ direccion.nombreCompleto }}</li>
+                    </ol>
+                </nav>
+       
+            <h3>Editar dirección</h3>
+            {% form_theme form 'bootstrap_4_layout.html.twig' %}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+                <div class="form-row">
+                    <div class="col-12">
+                        {{ form_label(form.nombreCompleto) }}
+                        {{ form_widget(form.nombreCompleto) }}
+                        {{ form_help(form.nombreCompleto) }}
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-6">
+                        {{ form_label(form.municipioNoMapped) }}
+                        {{ form_widget(form.municipioNoMapped) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_label(form.estadoNoMapped) }}
+                        {{ form_widget(form.estadoNoMapped) }}
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-6">
+                        {{ form_label(form.codigoPostalColoniaNoMapped) }}
+                        <div class="form-inline">
+                            {{ form_widget(form.codigoPostalColoniaNoMapped) }}
+                            {{ form_help(form.codigoPostalColoniaNoMapped) }}
+                            <button class="btn btn-sm btn-primary ml-2 btnValidate">Validar codigo postal</button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        {{ form_label(form.codigoPostalColonia) }}
+                        {{ form_widget(form.codigoPostalColonia) }}
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-12">
+                        {{ form_label(form.calle) }}
+                        {{ form_widget(form.calle) }}
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-4">
+                        {{ form_label(form.numeroExterior) }}
+                        {{ form_widget(form.numeroExterior) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_label(form.numeroInterior) }}
+                        {{ form_widget(form.numeroInterior) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_label(form.telefono) }}
+                        {{ form_widget(form.telefono) }}
+                        {{ form_help(form.telefono) }}
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-12">
+                        {{ form_label(form.Referencias) }}
+                        {{ form_widget(form.Referencias) }}
+                        {{ form_help(form.Referencias) }}
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-12">
+                        {{ form_label(form.instrucionesEntrega) }}
+                        {{ form_widget(form.instrucionesEntrega) }}
+                        {{ form_help(form.instrucionesEntrega) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-right mt-2">
+                        <button class="btn btn-sm btn-primary">{{ button_label|default('Guardar') }}</button>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<script>
+    {# var $estado = $('#cliente_direccion_estado');
+    // When sport gets selected ...
+    $estado.change(function() {
+      // ... retrieve the corresponding form.
+      var $form = $(this).closest('form');
+      // Simulate form data, but only include the selected sport value.
+      var data = {};
+      data[$estado.attr('name')] = $estado.val();
+      // Submit data via AJAX to the form's action path.
+      $.ajax({
+        url : $form.attr('action'),
+        type: $form.attr('method'),
+        data : data,
+        beforeSend: function(e){
+            $('#cliente_direccion_municipio').html("<option disabled selected> cargando ... </option>");
+        },
+        success: function(html) {
+          // Replace current position field ...
+          $('#cliente_direccion_municipio').replaceWith(
+            // ... with the returned one from the AJAX response.
+            $(html).find('#cliente_direccion_municipio')
+          );
+          // Position field now displays the appropriate positions.
+        }
+      });
+    }); #}
+
+    $('.btnValidate').click(function(e){
+        e.preventDefault();
+        var codigo = $('#editar_cliente_direccion_codigoPostalColoniaNoMapped').val();
+        if(codigo != ''){
+            var $estado = $('#editar_cliente_direccion_codigoPostalColoniaNoMapped');
+            var $form = $(this).closest('form');
+            // Simulate form data, but only include the selected sport value.
+            var data = {};
+            data[$estado.attr('name')] = $estado.val();
+            // Submit data via AJAX to the form's action path.
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                beforeSend: function(e){
+                    $('#editar_cliente_direccion_codigoPostalColonia').html("<option disabled selected> cargando ... </option>");
+                },
+                success: function(html) {
+                // Replace current position field ...
+                    $('#editar_cliente_direccion_codigoPostalColonia').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(html).find('#editar_cliente_direccion_codigoPostalColonia')
+                    );
+                    $('#editar_cliente_direccion_municipioNoMapped').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(html).find('#editar_cliente_direccion_municipioNoMapped')
+                    );
+                    $('#editar_cliente_direccion_estadoNoMapped').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(html).find('#editar_cliente_direccion_estadoNoMapped')
+                    );
+                    if($('#editar_cliente_direccion_codigoPostalColonia').hasClass('is-valid')){
+                        $('#editar_cliente_direccion_codigoPostalColonia').removeClass('is-invalid');
+                    }
+                // Position field now displays the appropriate positions.
+                }
+            });
+        }else{
+            $('#editar_cliente_direccion_codigoPostalColoniaNoMapped').focus();
+        }
+    });
+</script>

@@ -1,0 +1,86 @@
+{% set tab = 'generales' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+<div class="row">
+    <div class="col-md-10">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="form-row align-items-center">
+            <div class="col-4">
+                {{ form_label(form.sku) }}
+                {{ form_widget(form.sku) }}
+            </div>
+            <div class="col-4">
+                {{ form_label(form.categoria) }}
+                {{ form_widget(form.categoria) }}
+            </div>
+            <div class="col-4">
+                {{ form_label(form.subcategoria) }}
+                {{ form_widget(form.subcategoria) }}
+            </div>
+        </div>
+        <div class="form-row align-items-center mt-2">
+            <div class="col-12">
+                {{ form_label(form.descripcion) }}
+                {{ form_widget(form.descripcion) }}
+                {{ form_help(form.descripcion) }}
+            </div>
+        </div>
+        <div class="form-row align-items-center mt-2">
+            <div class="col-6">
+                {{ form_label(form.precio1) }}
+                {{ form_widget(form.precio1) }}
+            </div>
+            <div class="col-6">
+                {{ form_label(form.precio2) }}
+                {{ form_widget(form.precio2) }}
+            </div>
+        </div>
+        <div class="form-row align-items-center mt-2">
+            <div class="col-auto mr-2">
+                {{ form_label(form.activo) }}
+                {{ form_widget(form.activo) }}
+                {{ form_help(form.activo) }}
+            </div>
+            <div class="col-auto">
+                {{ form_label(form.sobrePedido) }}
+                {{ form_widget(form.sobrePedido) }}
+                {{ form_help(form.sobrePedido) }}
+            </div>
+        </div>
+        <div class="text-right mt-3">
+            <a class="btn btn-sm btn-outline-primary" href="{{ url('backend_articulo_index') }}">Regresar</a>
+            <button class="btn btn-sm btn-success">{{ button_label|default('Guardar') }}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+
+<script>
+    var $categoria = $('#articulo_categoria');
+    // When sport gets selected ...
+    $categoria.change(function() {
+        // ... retrieve the corresponding form.
+        var $form = $(this).closest('form');
+        // Simulate form data, but only include the selected sport value.
+        var data = {};
+        data[$categoria.attr('name')] = $categoria.val();
+        // Submit data via AJAX to the form's action path.
+        $.ajax({
+            url : $form.attr('action'),
+            type: $form.attr('method'),
+            data : data,
+            beforeSend: function(e){
+                $('#articulo_subcategoria').html("<option disabled selected> cargando ... </option>");
+            },
+            success: function(html) {
+            // Replace current position field ...
+            $('#articulo_subcategoria').replaceWith(
+                // ... with the returned one from the AJAX response.
+                $(html).find('#articulo_subcategoria')
+            );
+            // Position field now displays the appropriate positions.
+            }
+        });
+    });
+</script>

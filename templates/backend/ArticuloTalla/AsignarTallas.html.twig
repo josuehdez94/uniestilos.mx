@@ -1,0 +1,104 @@
+{% extends 'backend/Articulo/indexArticulo.html.twig' %}
+{% block title %}Asignar tallas{% endblock %}
+{% block buscador %}{% endblock %}
+{% block content %}
+    <div class="contenido mt-2">
+        <div class="page-title-area">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumbs-area clearfix">
+                        <ul class="breadcrumbs pull-left">
+                            <li><a href="{{ url('backend_articulo_index') }}">Lista Articulos</a></li>
+                            <li><span>Detalles {{ articulo.sku }}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <h4>Asinar tallas <b>{{ articulo.descripcion ~ ' ' ~ '(' ~ articulo.sku ~ ')' }}</b></h4>
+        <div class="row content">
+            <div class="col-lg-10 col-md-10 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="card-header">Tallas del articulo</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for articuloTalla in articulo.tallas %}
+                                        {% if articuloTalla.activa == true %}
+                                        <div class="col-1">
+                                            <div class="form-check">
+                                                <input class="form-check-input tallas" type="checkbox" id="checkTalla-{{ articuloTalla.id }}" data-id="{{ articuloTalla.talla.id }}" checked="true">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    {{ articuloTalla.talla.nombre }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div><span class="text-secondary">El articulo no tiene tallas</span></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card">
+                            <div class="card-header">Tallas por asignar</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for talla in tallasNoAsignadas %}
+                                    <div class="col-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input tallas" type="checkbox" id="checkTalla-{{ talla.id }}" data-id="{{ talla.id }}">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                {{ talla.nombre }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                        <div><span class="text-secondary">No hay tallas creadas</span></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $('.tallas').change(function(e){
+                        if($(this).is(':checked')){
+                            asignar = 'true';
+                        }else{
+                            asignar = 'false';
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url('backend_articulo_talla_asignar', {'articulo_id': articulo.id }) }}",
+                            data: {
+                                'asignar': asignar,
+                                'talla': $(this).attr('data-id')
+                            },
+                            beforeSend: function(e){
+                                showFlotante('Asignado talla ...');
+                            },
+                            success: function(e) {
+                                rs = JSON.parse(e);
+                                console.log(rs.content);
+                                if(rs.type == 'success'){
+                                   $('.content').html(rs.content);
+                                }else if(rs.type == 'error'){
+                                    Swal.fire({title: "Error!",text: rs.message, timer: 2500, icon: "error",button: false,});
+                                }
+                                hideFlotante();
+                            },
+                            error: function(e) {
+                                hideFlotante();
+                                Swal.fire({title: "Opss!",text: "Error en la petición", timer: 2000, icon: "error",button: false,});
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+{% endblock %}

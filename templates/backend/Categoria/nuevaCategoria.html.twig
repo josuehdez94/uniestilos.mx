@@ -1,0 +1,21 @@
+{% extends 'backend/Categoria/indexCategoria.html.twig' %}
+{% block title %}Nueva categoria{% endblock %}
+
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_categoria_index') }}">Categorias</a></li>
+                        <li><span>Nueva</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="mt-4">Nueva categoria</h4>
+    {{ include('backend/Categoria/_form.html.twig') }}
+</div>
+{% endblock %}

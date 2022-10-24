@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RoleSistema{% endblock %}
+
+{% block body %}
+    <h1>RoleSistema</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ role_sistema.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ role_sistema.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ role_sistema.role }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('role_sistema_index') }}">back to list</a>
+
+    <a href="{{ path('role_sistema_edit', {'id': role_sistema.id}) }}">edit</a>
+
+    {{ include('role_sistema/_delete_form.html.twig') }}
+{% endblock %}

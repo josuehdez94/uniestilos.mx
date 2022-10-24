@@ -1,0 +1,56 @@
+{% extends 'backend/Categoria/indexCategoria.html.twig' %}
+{% block title %}Detalles categoria{% endblock %}
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_categoria_index') }}">Categorias</a></li>
+                        <li><span>Detalles {{ categoria.nombre }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="mt-4">Detalles categoria <b>{{ categoria.nombre }}</b></h4>
+    <div class="row">
+        <div class="col-6">
+            <div class="table-responsive-md">
+                <table class="table table-sm table-hover">
+                    <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ categoria.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre</th>
+                        <td>{{ categoria.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <th>Url amigable</th>
+                        <td>{{ categoria.urlAmigable }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>
+                                <small><b>Creó:</b> {{ categoria.usuarioCreador.nombreCompleto }} a las {{ categoria.fechaHoraCreacion|date('Y-m-d g:i:a') }}</small>
+                            </p>
+                            {% if categoria.usuarioEditor is not null %}
+                            <p>
+                                <small><b>Editó:</b> {{ categoria.usuarioEditor ? categoria.usuarioEditor.nombreCompleto : '-' }} a las {{ categoria.fechaHoraEdicion ? categoria.fechaHoraEdicion|date('Y-m-d g:i:a') : '-' }}</small>
+                            </p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-right">
+                <a class="btn btn-sm btn-outline-primary" href="{{ url('backend_categoria_index') }}">Regresar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

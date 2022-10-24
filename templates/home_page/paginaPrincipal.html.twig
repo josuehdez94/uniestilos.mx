@@ -1,0 +1,94 @@
+{% extends 'home_page/homePage.html.twig' %}
+{% block title %}Nice NMT{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row box">
+            <div class="col-6">
+                <div class="text-center box" data-aos="fade-up-right">
+                   <b>
+                   NICE ha brindado una oportunidad de negocio a miles de personas en diversos países de América Latina haciendo posible mejorar su calidad de vida. 
+                   Hoy por hoy, nos hemos posicionado como la empresa más importante y consolidada en la fabricación y distribución de joyería y accesorios.
+                   </b>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="box"data-aos="zoom-out-right"> 
+                    <img  src="{{ asset('assets/img/front/seccion1Imagen1.png') }}" class="img-fluid"  width="400px" height="300px" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mx-5">
+        <div class="row row-cols-1 row-cols-md-4">
+            <div class="col mb-4">
+                <div class="card" data-aos="fade-up-right">
+                    <a href="">
+                        <img src="{{ asset('assets/img/front/seccion2Imagen1.jpg') }}" class="card-img-top" alt="..." width="400px" height="300px" id="Seccion2image1">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Esta en joyería y accesorios</h5>
+                        <p class="card-text">
+                            <small>
+                                <b>Los diseños de la joyería NICE siguen las últimas tendencias de la moda. Fabricadas por manos mexicanas con materiales de alta calidad, nuestras joyas tienen un año de garantía.</b>
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-4">
+                <div class="card" data-aos="fade-down-left">
+                    <img src="{{ asset('assets/img/front/seccion2Imagen2.jpg') }}" class="card-img-top" alt="..." width="700px" height="300px" id="Seccion2image2">
+                    <div class="card-body">
+                        <h5 class="card-title">Esencias</h5>
+                        <p class="card-text">
+                            <small>
+                                <b>Regresa a lo natural y ofrece a los demás una maravillosa alternativa de bienestar a través de nuestros aceites esenciales Nice & Bella Essential Oils.</b>
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-4">
+                <div class="card" data-aos="flip-down">
+                    <img src="{{ asset('assets/img/front/seccion2Imagen3.jpg') }}" class="card-img-top" alt="..." width="400px" height="300px" id="Seccion2image3">
+                    <div class="card-body">
+                        <h5 class="card-title">Productos comestibles</h5>
+                        <p class="card-text">
+                            <small>
+                                <b>Una línea especialmente formulada para impulsar nuestra mejor versión. Cada producto está enfocado en devolverle al organismo el bienestar que se merece.</b>
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/animate.js') }}"></script>
+     <script>
+        $( "#Seccion2image1" ).mouseover(function() {
+            var url = '{{ asset("assets/img/front/seccion2ImagenBack1.jpg")}}';
+            $(this).attr('src', url);
+        });
+        $( "#Seccion2image1" ).mouseleave(function() {
+            var url = '{{ asset("assets/img/front/seccion2Imagen1.jpg")}}';
+            $(this).attr('src', url);
+        });
+        $( "#Seccion2image2" ).mouseover(function() {
+            var url = '{{ asset("assets/img/front/seccion2ImagenBack2.jpg")}}';
+            $(this).attr('src', url);
+        });
+        $( "#Seccion2image2" ).mouseleave(function() {
+            var url = '{{ asset("assets/img/front/seccion2Imagen2.jpg")}}';
+            $(this).attr('src', url);
+        });
+         $( "#Seccion2image3" ).mouseover(function() {
+            var url = '{{ asset("assets/img/front/seccion2ImagenBack3.jpg")}}';
+            $(this).attr('src', url);
+        });
+        $( "#Seccion2image3" ).mouseleave(function() {
+            var url = '{{ asset("assets/img/front/seccion2Imagen3.jpg")}}';
+            $(this).attr('src', url);
+        });
+        AOS.init();
+     </script>
+{% endblock content %}

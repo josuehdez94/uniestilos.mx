@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ClienteDireccion index{% endblock %}
+
+{% block body %}
+    <h1>ClienteDireccion index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NombreCompleto</th>
+                <th>Calle</th>
+                <th>NumeroExterior</th>
+                <th>NumeroInterior</th>
+                <th>CodigoPostal</th>
+                <th>Telefono</th>
+                <th>InstrucionesEntrega</th>
+                <th>Referencias</th>
+                <th>Colonia</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cliente_direccion in cliente_direccions %}
+            <tr>
+                <td>{{ cliente_direccion.id }}</td>
+                <td>{{ cliente_direccion.nombreCompleto }}</td>
+                <td>{{ cliente_direccion.calle }}</td>
+                <td>{{ cliente_direccion.numeroExterior }}</td>
+                <td>{{ cliente_direccion.numeroInterior }}</td>
+                <td>{{ cliente_direccion.codigoPostal }}</td>
+                <td>{{ cliente_direccion.telefono }}</td>
+                <td>{{ cliente_direccion.instrucionesEntrega }}</td>
+                <td>{{ cliente_direccion.Referencias }}</td>
+                <td>{{ cliente_direccion.colonia }}</td>
+                <td>
+                    <a href="{{ path('cliente_direccion_show', {'id': cliente_direccion.id}) }}">show</a>
+                    <a href="{{ path('cliente_direccion_edit', {'id': cliente_direccion.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cliente_direccion_new') }}">Create new</a>
+{% endblock %}

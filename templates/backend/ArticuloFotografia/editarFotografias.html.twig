@@ -1,0 +1,105 @@
+{% extends 'backend/Articulo/baseEditarArticulo.html.twig' %}
+{% block editarArticulo %}
+    <div class="mt-2">
+            {# <style>
+                .swiper-container {
+                    width: 100%;
+                    height: 250px;
+                    margin: 20px auto;
+                }
+
+                .swiper-slide {
+                    text-align: center;
+                    font-size: 18px;
+                    background: #fff;
+
+                    /* Center slide text vertically */
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: -webkit-flex;
+                    display: flex;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    -webkit-justify-content: center;
+                    justify-content: center;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    -webkit-align-items: center;
+                    align-items: center;
+                }
+            </style>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for foto in articulo.fotografias %}
+                    <div class="swiper-slide">
+                        <div class="card" style="width: 18rem;">
+                            <img src="{{foto.getWebThumbnailNombreArchivo}}" class="img-fluid" alt="Responsive image" style="height:150px">
+                            <div class="card-body">
+                                <form method="POST", action="{{ url('backend_articulo_fotografia_eliminar', {'id': foto.id }) }}">
+                                    <input type="submit" class="btn btn-sm btn-danger text-light" value="Eliminar" />
+                                </form>
+                                {% if articulo.fotografiaprincipal is not null and articulo.fotografiaPrincipal.id == foto.id %}
+                                    <span>Foto principal</span>
+                                {% else %}
+                                <form method="POST", action="{{ url('backend_articulo_fotografia_principal', {'id': foto.id }) }}">
+                                    <input type="submit" class="btn btn-sm btn-success text-light" value="Principal" />
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Arrows -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div> #}
+        <div class="container">
+            <div class="row">
+            {% for fotografia in articulo.fotografias %}
+                <div class="col-lg-2 col-md-2 col-sm-4">
+                    <img src="{{ fotografia.getWebThumbnailNombreArchivo }}" alt="..." class="img-thumbnail img-fluid" style="width:70px;height:70px">
+                    <form method="POST", action="{{ url('backend_articulo_fotografia_eliminar', {'id': fotografia.id }) }}">
+                        <input type="submit" class="btn btn-sm btn-link text-danger" value="Eliminar" />
+                    </form>
+                    {% if articulo.fotografiaprincipal is not null and articulo.fotografiaPrincipal.id == fotografia.id %}
+                        <span class="text-secondary">Foto principal</span>
+                    {% else %}
+                    <form method="POST", action="{{ url('backend_articulo_fotografia_principal', {'id': fotografia.id }) }}">
+                        <input type="submit" class="btn btn-sm btn-link text-success" value="Principal" />
+                    </form>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="col-lg-3">
+                    no hay fotografias
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="mt-5" style="z-index:1">
+            <form method="POST" action="{{ url('backend_articulo_fotografia', {'articulo_id': articulo.id}) }}" enctype="multipart/form-data">
+                <div class="file-loading mt-3">
+                    <input id="input-fotografias" name="fotografias[]" type="file" multiple required="true">
+                </div>
+                <div class="text-right mt-3">
+                    <input type="submit" class="btn btn-sm btn-success" value="Subir fotografias"/>
+                </div>
+            </form>
+        </div>
+        <script>
+            $("#input-fotografias").fileinput({
+                language: "es",
+                uploadUrl: "/",
+                allowedFileExtensions: ["jpg", "png", "jpeg"],
+                maxImageWidth: 1080,
+                maxImageHeight: 720,
+                maxFileSize: 2048,
+                showUpload: false,
+                initialCaption: "sube las fotos del articulo"
+            });
+        </script>
+    </div>
+{% endblock %}
