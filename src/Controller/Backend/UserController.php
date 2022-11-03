@@ -4,23 +4,29 @@ namespace App\Controller\Backend;
 
 use App\Entity\User;
 use App\Form\Backend\User\UserType;
+use App\Generales\Funciones;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 
 /**
  * @Route("/backend/admin/usuario")
  */
 class UserController extends AbstractController
 {
-     use ResetPasswordControllerTrait;
+    const CLAVE_API = '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';
+    use ResetPasswordControllerTrait;
 
     private $resetPasswordHelper;
 
@@ -42,24 +48,45 @@ class UserController extends AbstractController
     /**
      * @Route("/nuevo", name="backend_user_nuevo", methods={"GET","POST"})
      */
-    public function nuevoUsuario(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function nuevoUsuario(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $encoded = $passwordEncoder->encodePassword($user, 'nicejoyeria');
-            $user->setPassword($encoded);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            //$this->addFlash('Creado', 'Usuario creado exitosamente');
-            //return $this->redirectToRoute('backend_user_index');
-            return $this->processSendingPasswordResetEmail(
-                $form->get('email')->getData(),
-                $mailer
-            );
+            $entityManager->getConnection()->beginTransaction();
+            try {
+                $encryt = new Funciones;
+                $cadena = md5(random_int(-20000, 50000).date('Y-m-d g:i:s'));
+                $key = md5(random_int(-50000, 20000).date('Y-m-d g:i:s'));
+                $clave = md5(date('Y-m-d g:i:s').random_int(-1000, 1000), false);
+                $hashedPassword = $passwordHasher->hashPassword($user, 'uniestilos');
+                $user->setPassword($hashedPassword);
+                $user->setActivo(false);
+                $user->setTipoUser('E');
+                $user->setClaveVerificacion($clave);
+                $user->setCrypt($encryt->encriptar($cadena, $key).','.$key);
+                $user->setDecrypt($cadena);
+                $user->setUid($cadena);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                //$this->addFlash('Creado', 'Usuario creado exitosamente');
+                //return $this->redirectToRoute('backend_user_index');
+                $this->processSendingPasswordResetEmail(
+                    $form->get('email')->getData(),
+                    $entityManager,
+                    $mailer
+                );
+                #comit de todos los flush
+                $entityManager->getConnection()->commit();
+            }catch (\Exception $e) {
+                #rollback de todos los flush
+                $entityManager->getConnection()->rollBack();
+                throw $this->createNotFoundException($e->getMessage());
+            }
+
+            return $this->redirectToRoute('backend_user_index');
         }
 
         return $this->render('backend/User/nuevoUsuario.html.twig', [
@@ -112,17 +139,17 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_index');
     }
     
-    private function processSendingPasswordResetEmail(string $emailFormData, \Swift_Mailer $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, EntityManagerInterface $entityManager, MailerInterface $mailer)
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
         // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
+        //$this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
         if(!$user){
-           $this->addFlash('reset_password_error', 'El email ingresado no tiene cuenta en nicenmt');
+           $this->addFlash('reset_password_error', 'El email ingresado no tiene cuenta en uniestilos');
            return $this->redirectToRoute('app_forgot_password_request'); 
         }
 
@@ -140,39 +167,55 @@ class UserController extends AbstractController
 
             //return $this->redirectToRoute('app_check_email');
             $this->addFlash('reset_password_error', 'ocurrio un error al generar la clave de restablecimiento de contraseña');
-            return $this->redirectToRoute('app_forgot_password_request');
+            dump($e->getReason());
+            exit();
+            //return $this->redirectToRoute('app_forgot_password_request');
         }
-
-        /*$email = (new TemplatedEmail())
-            ->from(new Address('reset@nicenmt.com', 'reset password nice'))
-            ->to($user->getEmail())
+        $email = (new TemplatedEmail())
+            ->from(new Address('josue.hdez_94@outlook.com', 'uniestilos'))
+            ->to(new Address($user->getEmail()))
             ->subject('Your password reset request')
-            ->htmlTemplate('backend/ResetPassword/email.html.twig')
+            ->htmlTemplate('backend/ResetPassword/email.html.twig', [
+                'resetToken' => $resetToken,
+                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
+            ])
             ->context([
                 'resetToken' => $resetToken,
                 'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
             ])
-        ;*/
-        //$resetToken = hash('sha512', date('Y-m-d g:i:s'));
-        //$resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        
-        $message = (new \Swift_Message('Restablecer contraseña'))
-        ->setFrom('resetpassword@nicenmt.com')
-        ->setTo('pruebastodopartes@gmail.com')
-        ->setBody(
-            $this->renderView(
-                //templates/emails/registration.html.twig
-                'backend/ResetPassword/email.html.twig',
-                ['resetToken' => $resetToken,
-                   'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-                    ]
-            ),
-            'text/html'
+        ;
+        /* $email = new Mail();
+        $email->setFrom("josue.hdez_94@outlook.com", "Uniestilos");
+        $email->setSubject("Correo de verificacion email");
+        $email->addTo($user->getEmail(), "Uniestilos");
+        $email->addContent(
+            "text/html", $this->renderView('backend/ResetPassword/email.html.twig', [
+                'resetToken' => $resetToken,
+                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
+            ])
         );
+        $sendgrid = new SendGrid(self::CLAVE_API);
+        try {
+            $response = $sendgrid->send($email);
+            print $response->statusCode() . "\n";
+            print_r($response->headers());
+            print $response->body() . "\n";
+        } catch (\Exception $e) {
+            echo 'Caught exception: '. $e->getMessage() ."\n";
+        }
+        echo 'here';
+        exit(); */
 
-        $mailer->send($message);
+        //$mailer->send($email);
+        try {
+            $mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            dump($e);
+        }
+        // Store the token object in session for retrieval in check-email route.
+        $this->setTokenObjectInSession($resetToken);
 
-        return $this->redirectToRoute('app_check_email');
+        return $this->redirectToRoute('backend_user_index');
     }
 
     /**

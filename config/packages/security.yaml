@@ -9,14 +9,33 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
+                property: email
                 #property: name
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        secondary:
+            lazy: true
+            custom_authenticator:
+                #- App\Security\LoginFormAuthenticator
+                - App\Security\SecondaryAuthenticator
+
+            #guard:
+                #authenticators:
+                    #- App\Security\LoginFormAuthenticator
+            pattern: ^/backend
+            provider: app_user_provider
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_login
         main:
             lazy: true
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            custom_authenticator:
+                #- App\Security\LoginFormAuthenticator
+                - App\Security\MainAuthenticator
+
             #guard:
                 #authenticators:
                     #- App\Security\LoginFormAuthenticator
@@ -38,6 +57,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/backend/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/backend/reset-password/reset, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/backend/users/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cliente/registro$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

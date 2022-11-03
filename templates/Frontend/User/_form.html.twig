@@ -15,11 +15,22 @@
                     
                 </div>
                 <div class="col-lg-6">
+                    {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+                        {% for message in messages %}
+                            <div class="col-md-8">
+                                <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                                    <strong>{{label}}</strong>, {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
                     <div class="box">
                         <h1>Nueva cuenta</h1>
                         <p class="lead">Aún no estas registrado?</p>
                         <p>¡Registrate para obtener increibles descuentos y promociones, solo te tomara un minuto crear tu cuenta!</p>
-                        <p class="text-muted">Si tienes alguna pregunta, por favor contactanos al siguiente correo <a href="contact.html">contactanos</a></p>
                         <hr>
                         {#<form action="customer-orders.html" method="post">#}
                         {{ form_errors(form) }}

@@ -4,6 +4,7 @@ namespace App\Form\Backend\Categoria;
 
 use App\Entity\Categoria;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,6 +19,7 @@ class CategoriaType extends AbstractType
                     'class' => 'form-control form-control-sm'
                 ]
             ])
+            ->add('descripcion', TextareaType::class)
         ;
     }
 

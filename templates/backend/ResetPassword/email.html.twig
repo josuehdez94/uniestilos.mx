@@ -3,6 +3,6 @@
 
 <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
 
-<p>Este link expira en {{ tokenLifetime|date('g') }} hour(s).</p>
+<p>Este link expira a las {{ tokenLifetime|date('g:i:s') }}</p>
 
 <p>Gracias!</p>

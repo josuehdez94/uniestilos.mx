@@ -7,14 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="User")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     errorPath="email",
+ *     message="Este email ya pertenece a una cuenta",
+ *     groups={"backend_user_nuevo", "front_user_nuevo"}
+ * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface {
+class User implements UserInterface , PasswordAuthenticatedUserInterface{
 
     /**
      * @ORM\Id

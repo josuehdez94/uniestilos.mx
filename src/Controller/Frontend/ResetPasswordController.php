@@ -14,9 +14,12 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/restablecer-contraseña")
@@ -25,11 +28,13 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private $resetPasswordHelper;
+    private ResetPasswordHelperInterface $resetPasswordHelper;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, EntityManagerInterface $entityManager)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -37,7 +42,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="front_forgot_password_request")
      */
-    public function request(Request $request, \Swift_Mailer $mailer): Response
+    public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirect($this->generateUrl('frontend_home_page'));
@@ -49,7 +54,8 @@ class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
-                $mailer
+                $mailer,
+                $translator
             );
         }
 
@@ -65,12 +71,14 @@ class ResetPasswordController extends AbstractController
      */
     public function checkEmail(): Response
     {
-        // We prevent users from directly accessing this page
-        if (!$this->canCheckEmail()) {
-            return $this->redirectToRoute('front_forgot_password_request');
+        // Generate a fake token if the user does not exist or someone hit this page directly.
+        // This prevents exposing whether or not a user was found with the given email address or not
+        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
+            $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
         return $this->render('Frontend/ResetPassword/check_email.html.twig', [
+            'resetToken' => $resetToken,
             'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
         ]);
     }
@@ -80,7 +88,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="front_reset_password")
      */
-    public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator, string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -114,14 +122,14 @@ class ResetPasswordController extends AbstractController
             // A password reset token should be used only once, remove it.
             $this->resetPasswordHelper->removeResetRequest($token);
 
-            // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword(
+            // Encode(hash) the plain password, and set it.
+            $encodedPassword = $userPasswordHasher->hashPassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
 
             $user->setPassword($encodedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -135,20 +143,22 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, \Swift_Mailer $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
-        // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
+        
 
         // Do not reveal whether a user account was found or not.
         if(!$user){
-           $this->addFlash('reset_password_error', 'El email ingresado no tiene cuenta en uniestilos.mx');
+           $this->addFlash('reset_password_error', 'El email '.$emailFormData.' no tiene cuenta en uniestilos.mx');
            return $this->redirectToRoute('front_forgot_password_request'); 
         }
-
+        if($user->getTipoUser() == 'E'){
+            $this->addFlash('reset_password_error', 'El email '.$emailFormData.' no se puede ocupar en uniestilos.mx');
+            return $this->redirectToRoute('front_forgot_password_request'); 
+        }
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
@@ -162,39 +172,32 @@ class ResetPasswordController extends AbstractController
             ));*/
 
             //return $this->redirectToRoute('app_check_email');
-            $this->addFlash('reset_password_error', 'ocurrio un error al generar la clave de restablecimiento de contraseña');
+            //$this->addFlash('reset_password_error', 'ocurrio un error al generar la clave de restablecimiento de contraseña');
+            $this->addFlash('reset_password_error', sprintf(
+                '%s - %s',
+                $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
+                $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
+           ));
             return $this->redirectToRoute('front_forgot_password_request');
         }
-
-        /*$email = (new TemplatedEmail())
-            ->from(new Address('reset@nicenmt.com', 'reset password nice'))
-            ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('backend/ResetPassword/email.html.twig')
+        
+        $email = (new TemplatedEmail())
+            ->from(new Address('josue.hdez_94@outlook.com', 'uniestilos'))
+            ->to(new Address($user->getEmail()))
+            ->subject('Restablecer contraseña')
+            ->htmlTemplate('Frontend/Correos/restablecerContraseña.html.twig', [
+                'resetToken' => $resetToken,
+                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime()
+            ])
             ->context([
                 'resetToken' => $resetToken,
-                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
+                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime()
             ])
-        ;*/
-        //$resetToken = hash('sha512', date('Y-m-d g:i:s'));
-        //$resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        
-        $message = (new \Swift_Message('Restablecer contraseña'))
-        ->setFrom('resetpassword@nicenmt.com')
-        ->setTo($user->getEmail())
-        ->setBody(
-            $this->renderView(
-                //templates/emails/registration.html.twig
-                'Frontend/ResetPassword/email.html.twig',
-                ['resetToken' => $resetToken,
-                   'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-                    ]
-            ),
-            'text/html'
-        );
+        ;
 
-        $mailer->send($message);
-
+        $mailer->send($email);
+        // Store the token object in session for retrieval in check-email route.
+        $this->setTokenObjectInSession($resetToken);
         return $this->redirectToRoute('front_check_email');
     }
 }

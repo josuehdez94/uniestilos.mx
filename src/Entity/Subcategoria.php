@@ -64,6 +64,11 @@ class Subcategoria
      */
     private $articulos;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $descripcion;
+
     public function __construct()
     {
         $this->articulos = new ArrayCollection();
@@ -150,6 +155,18 @@ class Subcategoria
                 $articulo->setSubcategoria(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescripcion(): ?string
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(?string $descripcion): self
+    {
+        $this->descripcion = $descripcion;
 
         return $this;
     }

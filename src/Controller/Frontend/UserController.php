@@ -12,7 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 
 
 /**
@@ -49,9 +54,8 @@ class UserController extends AbstractController
     /**
      * @Route("/registro", name="front_user_nuevo", requirements={"crypt": ".+"}, methods={"GET","POST"})
      */
-    public function nuevoRegistro(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer): Response
+    public function nuevoRegistro(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -61,9 +65,9 @@ class UserController extends AbstractController
             $encryt = new Funciones();
             $cadena = md5(random_int(-20000, 50000).date('Y-m-d g:i:s'));
             $key = md5(random_int(-50000, 20000).date('Y-m-d g:i:s'));
-            $encoded = $passwordEncoder->encodePassword($user, $form->get('password')->getData());
+            $hashedPassword = $passwordHasher->hashPassword($user, $form->get('password')->getData());
             $clave = md5(date('Y-m-d g:i:s').random_int(-1000, 1000), false);
-            $user->setPassword($encoded);
+            $user->setPassword($hashedPassword);
             $user->setTipoUser('C');
             $user->setClaveVerificacion($clave);
             $user->setCrypt($encryt->encriptar($cadena, $key).','.$key);
@@ -71,22 +75,23 @@ class UserController extends AbstractController
             $user->setUid($cadena);
             $entityManager->persist($user);
             $entityManager->flush();
-            $message = (new \Swift_Message('Bienvenido a TodoPartes'))
-                    ->setFrom('no-contestar@nicenmt.mx')
-                    ->setTo($user->getEmail())
-                    ->setBody(
-                    $this->renderView(
-                            'Frontend/User/Correos/validarCuenta.html.twig', [
-                                'nombre' => $user->nombreCompleto(),
-                                'cadena' => $user->getClaveVerificacion(),
-                                'correo' => $user->getEmail()
-                            ]
-                    ),
-                    'text/html'
-                    )
-            ;
 
-            $mailer->send($message);
+            $email = (new TemplatedEmail())
+                ->from(new Address('josue.hdez_94@outlook.com', 'uniestilos'))
+                ->to(new Address($user->getEmail()))
+                ->subject('Bienbenido(a) a uniestilos.mx')
+                ->htmlTemplate('Frontend/Correos/nuevaCuenta.html.twig', [
+                    'nombre' => $user->nombreCompleto(),
+                    'cadena' => $user->getClaveVerificacion(),
+                    'correo' => $user->getEmail()
+                ])
+                ->context([
+                    'nombre' => $user->nombreCompleto(),
+                    'cadena' => $user->getClaveVerificacion(),
+                    'correo' => $user->getEmail()
+                ])
+            ;
+            $mailer->send($email);
             $this->addFlash('Creado', 'Cuenta creada exitosamente, por favor verifica tu cuenta, te hemos enviado una clave a '. $user->getEmail());
             return $this->redirectToRoute('front_user_nuevo');
         }
@@ -96,56 +101,11 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
-     */
-    public function show(User $user): Response
-    {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, User $user): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="user_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, User $user): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('user_index');
-    }
     
     /**
      * @Route("/validacion-correo/{cadena}-{correo}", name="frontend_cliente_validacion", methods={"GET", "POST"})
      */
-    public function validacionCorreo(Request $request, $cadena, $correo) {
-        $entityManager = $this->getDoctrine()->getManager();
+    public function validacionCorreo(Request $request, EntityManagerInterface $entityManager, $cadena, $correo) {
         $cliente = $entityManager->getRepository(User::class)->findOneBy(['email' => $correo, 'claveVerificacion' => $cadena]);
 
         if ($cliente == null) {

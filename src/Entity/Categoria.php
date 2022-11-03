@@ -81,6 +81,11 @@ class Categoria
      */
     private $urlAmigable;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $descripcion;
+
     public function __construct()
     {
         $this->fechahoraCreacion = new \DateTime();
@@ -226,6 +231,18 @@ class Categoria
     public function setUrlAmigable(?string $urlAmigable): self
     {
         $this->urlAmigable = $urlAmigable;
+
+        return $this;
+    }
+
+    public function getDescripcion(): ?string
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(?string $descripcion): self
+    {
+        $this->descripcion = $descripcion;
 
         return $this;
     }

@@ -12,7 +12,10 @@
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item">
-									<a href="#">Home</a>
+									<a href="{{ url('frontend_home_page') }}">Inicio</a>
+								</li>
+								<li class="breadcrumb-item">
+									<a href="{{ url('frontend_articulo_por_categoria', {'urlAmigable': subcategoria.categoria.urlAmigable}) }}">{{ subcategoria.categoria.nombre|title }}</a>
 								</li>
 								<li aria-current="page" class="breadcrumb-item active">{{ subcategoria.nombre }}</li>
 							</ol>
@@ -181,9 +184,8 @@
 					</div>
 					<div class="col-lg-9">
 						<div class="box">
-							<h1>{{ subcategoria.nombre }}</h1>
-							<p>In our Ladies department we offer wide selection of the best products we have found and carefully
-								                selected worldwide.</p>
+							<h1>{{ subcategoria.nombre|title }}</h1>
+							<p>{{ subcategoria.descripcion ? subcategoria.descripcion : '' }}</p>
 						</div>
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-12">
@@ -202,7 +204,7 @@
 									<div class="flip-container">
 										<div class="flipper">
 											<div class="front">
-												<a href="detail.html"><img src="{{ articulo.fotografiaPrincipal ? articulo.fotografiaPrincipal.getWebNombreArchivo : asset('assets/img/noImage.png') }}" alt="" class="img-fluid"></a>
+												<a href="{{ url('frontend_articulo_detalles', {'urlAmigable': articulo.urlAmigable }) }}"><img src="{{ articulo.fotografiaPrincipal ? articulo.fotografiaPrincipal.getWebNombreArchivo : asset('assets/img/noImage.png') }}" alt="" class="img-fluid" style="width:250px;height:200px"></a>
 											</div>
                                             {# {% if articulo.fotografias|length > 1 %}
 											<div class="back">

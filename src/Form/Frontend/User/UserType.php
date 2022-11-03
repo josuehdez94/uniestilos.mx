@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -82,6 +83,9 @@ class UserType extends AbstractType
                     new NotBlank([
                         'message' => 'Por favor ingresa un nombre(s)',
                     ]),
+                    new Email([
+                        'message' => 'El email {{ value }} no es valido'
+                    ]),
                     new Length([
                         'min' => 3,
                         'max' => 50,
@@ -126,6 +130,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'validation_groups' => ['front_user_nuevo']
         ]);
     }
 }
