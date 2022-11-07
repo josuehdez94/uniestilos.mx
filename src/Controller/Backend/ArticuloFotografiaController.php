@@ -240,7 +240,8 @@ class ArticuloFotografiaController extends AbstractController
     protected function getUploadRootDirNombreArchivo() {
         // the absolute directory picture where uploaded
         // documents should be saved
-        return '/var/www/tiendaonline/market/project/public' . $this->getUploadDirNombreArchivo();
+        //return '/var/www/tiendaonline/market/project/public' . $this->getUploadDirNombreArchivo();
+        return $this->getParameter('imagenes_articulos');
     }
 
     protected function getUploadDirNombreArchivo() {

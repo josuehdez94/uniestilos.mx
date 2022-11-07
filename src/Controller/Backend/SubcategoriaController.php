@@ -51,7 +51,7 @@ class SubcategoriaController extends AbstractController
             return $this->redirectToRoute('backend_subcategoria_categoria', ['categoria_urlAmigable' => $categoria->getUrlAmigable()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('backend/Subcategoria/nueva.html.twig', [
+        return $this->renderForm('backend/Subcategoria/nueva.html.twig', [
             'categoria' => $categoria,
             'form' => $form,
         ]);
