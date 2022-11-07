@@ -126,7 +126,7 @@ class ArticuloFotografia
     ######################Funciones Fotografias #################################
     private function getServerUrl() {
         //return (isset($_SERVER["HTTPS"]) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/';
-        return (isset($_SERVER["HTTPS"]) ?  'http://': 'https://') . $_SERVER['SERVER_NAME'] . '/';
+        return (isset($_SERVER["HTTPS"]) ?  'https://': 'http://') . $_SERVER['SERVER_NAME'] . '/';
     }
     /**
      * Regresa una imagen por defecto cuando no encuentra la original
@@ -185,7 +185,7 @@ class ArticuloFotografia
     protected function getUploadRootDirNombreArchivo() {
         // the absolute directory picture where uploaded
         // documents should be saved
-        return '/var/www/tiendaonline/market/project/public'.$this->getUploadDirNombreArchivo();
+        return '/var/www/tiendaonline/market/uniestilos.mx/public'.$this->getUploadDirNombreArchivo();
     }
 
     protected function getUploadDirNombreArchivo() {
