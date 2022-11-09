@@ -106,8 +106,13 @@ class SubcategoriaController extends AbstractController
             throw $this->createNotFoundException('Subcategoria no encontrada');
         }
         if ($this->isCsrfTokenValid('delete'.$subcategoria->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($subcategoria);
-            $entityManager->flush();
+            if(count($subcategoria->getArticulos()) == 0){
+                $entityManager->remove($subcategoria);
+                $entityManager->flush();
+                $this->addFlash('Eliminado', 'Subcategoria ha sido eliminada');
+            }else{
+                $this->addFlash('Eliminado', 'La subcategoria ya esta añadida a varios articulos, no es posible eliminarla');
+            }
         }
 
         return $this->redirectToRoute('backend_subcategoria_categoria', ['categoria_urlAmigable' => $subcategoria->getCategoria()->getUrlAmigable()], Response::HTTP_SEE_OTHER);

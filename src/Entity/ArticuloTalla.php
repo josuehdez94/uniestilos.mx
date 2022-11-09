@@ -30,7 +30,7 @@ class ArticuloTalla
     private $almacen;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tallas::class)
+     * @ORM\ManyToOne(targetEntity=Tallas::class, inversedBy="tallas")
      * @ORM\JoinColumn(nullable=false)
      */
     private $talla;

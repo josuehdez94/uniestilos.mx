@@ -116,7 +116,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 {% for foto in articulo.fotografias %}
-                                                <div class="col-2 mr-2 ml-2">
+                                                <div class="col-2 mx-5">
                                                     <img src="{{ foto.getWebThumbnailNombreArchivo }}" class="card-img-top" alt="..." id="imagenChange-{{foto.id}}" style="height: 60px; width: 90px">
                                                         <script>
                                                         $( "#imagenChange-{{foto.id}}" ).click(function() {

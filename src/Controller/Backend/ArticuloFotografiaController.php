@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/backend/fotografias")
@@ -15,48 +16,53 @@ class ArticuloFotografiaController extends AbstractController
     /**
      * @Route("/subir/{articulo_id}", name="backend_articulo_fotografia", methods={"POST"})
      */
-    public function nuevaFotografia(Request $request, $articulo_id)
+    public function nuevaFotografia(Request $request, EntityManagerInterface $entityManager, $articulo_id)
     {
-       $entityManager = $this->getDoctrine()->getManager();
-       $articulo = $entityManager->getRepository(\App\Entity\Articulo::class)->findOneById($articulo_id);
-       if (!$articulo){
-           throw $this->createNotFoundException('Articulo no encontrado.');
-       }
-      
-        $erroresTipo = [];
+        $articulo = $entityManager->getRepository(\App\Entity\Articulo::class)->findOneById($articulo_id);
+        if (!$articulo){
+            throw $this->createNotFoundException('Articulo no encontrado.');
+        }
+        $imagenesSubidas = 0;
         $erroresTamaño = [];
         foreach ($request->files->get('fotografias') as $foto){
            $tipo = $foto->getMimeType();
            $temp = $foto->getPathName();
-           if($tipo == 'image/jpeg' || $tipo == 'image/jpg' || $tipo == 'image/png'){
+            if($tipo == 'image/jpeg' || $tipo == 'image/jpg' || $tipo == 'image/png'){
                 //count($request->files->get('fotografias')) > 1 ?  $nombreArchivo = $_FILES['fotografias']['name'][1] : $nombreArchivo = $_FILES['fotografias']['name'];
                 $nombreArchivo = $_FILES['fotografias']['name'][0];
                 list($ancho, $alto, $extension) = getimagesize($temp);
-               /* if ($ancho > 300 && $ancho < 1000){
-                    if ($alto > 600 && $alto < 1000){ */
+                if ($ancho >= 1080 && $alto >= 720){
+                    /*if ($alto > 600 && $alto < 1000){ */
                         $nombreArchivoBd = hash('md5', date('Y-m-d g:i:s').random_int(0, 4000000)).'.'.substr($nombreArchivo,strrpos($nombreArchivo,'.')+1);
                         $this->subirFotografias($temp, $nombreArchivoBd);
                         $fotografia = new \App\Entity\ArticuloFotografia();
                         $fotografia->setArticulo($articulo);
                         $fotografia->setUsuarioSubio($this->getUser());
                         $fotografia->setFechaHoraCreacion(new \DateTime());
-                        $fotografia->setNombreArchivo(substr($nombreArchivoBd,0,-3).'webp');
+                        if($tipo == 'image/jpeg'){
+                            $fotografia->setNombreArchivo(substr($nombreArchivoBd,0,-4).'webp');
+                        }else{
+                            $fotografia->setNombreArchivo(substr($nombreArchivoBd,0,-3).'webp');
+                        }
                         $entityManager->persist($fotografia);
                         $entityManager->flush();
+                        if(count($articulo->getFotografias()) == 1){
+                            $articulo->setFotografiaPrincipal($fotografia);
+                        }
+                        $imagenesSubidas = $imagenesSubidas + 1;
                    /*  }else{
                         $erroresTamaño [] = [
                             'archivo' => $nombreArchivo,
                             'alto' => $alto,
                             'error' => 'El alto de esta imagen no es el correcto'
                         ];
-                    }
+                    }*/
                }else{
                    $erroresTamaño [] = [
                        'archivo' => $nombreArchivo,
-                       'ancho' => $ancho,
-                       'error' => 'El ancho de esta imagen no es el correcto'
+                       'error' => 'El tamaño de la imagen '.$nombreArchivo.' no esta en resolucion HD(1080x720), tiene una resolución de '.$alto. ' x '.$ancho
                    ];
-               }*/
+               }
            }/* else{
                 $erroresTipo [] = [
                     'archivo' => $temp,
@@ -66,7 +72,12 @@ class ArticuloFotografiaController extends AbstractController
            }  */
 
         }
-        $this->addFlash('Editado', 'Se han añadido nuevas fotografias');
+        if($imagenesSubidas > 0){
+            $this->addFlash('Editado', 'Se han añadido nuevas fotografias');
+        }
+        foreach($erroresTamaño as $error){
+            $this->addFlash('Atención', $error['error']);
+        }
         return $this->redirectToRoute('backend_articulo_fotografia_editar', [
             'id' => $articulo->getId()
         ]);

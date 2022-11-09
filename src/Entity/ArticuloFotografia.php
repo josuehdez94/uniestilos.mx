@@ -175,7 +175,7 @@ class ArticuloFotografia
 
     public function getWebNombreArchivo() {
         if (file_exists($this->getAbsoluteNombreArchivo())) {
-            return null === $this->nombreArchivo ? null : $this->getServerUrl() . $this->getUploadDirNombreArchivo() . '/' . $this->nombreArchivo;
+            return null === $this->nombreArchivo ? null :  $this->getUploadDirNombreArchivo() . '/' . $this->nombreArchivo;
         } else {
             return $this->getNoLogoImage();
         }

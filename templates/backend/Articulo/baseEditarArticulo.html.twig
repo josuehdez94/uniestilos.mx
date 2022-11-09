@@ -23,10 +23,17 @@
         <hr>
         <h4 class="mt-2">Editando Articulo <b>{{ articulo.descripcion ~ ' ' ~ '(' ~ articulo.sku ~ ')' }}</b></h4>
         <hr>
-        {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+        {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado', 'Atención']) %}
             {% for message in messages %}
                 <div class="col-md-8">
-                    <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                    {% if label == 'Editado' or label == 'Creado' or  label == 'Eliminado' %}
+                        {% set alert = 'alert-success' %}
+                    {% elseif label == 'Atención' %}
+                        {% set alert = 'alert-warning' %}
+                    {% else %}
+                        {% set alert = 'alert-danger' %}
+                    {% endif %}
+                    <div class="alert {{ alert }} alert-dismissible fade show" role="alert" id="flashMessage">
                         <strong>{{label}}</strong>, {{ message }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

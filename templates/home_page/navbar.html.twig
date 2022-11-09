@@ -70,7 +70,7 @@
         
       </div>
       <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="z-index:1">
-        <div class="container"><a href="index.html" class="navbar-brand home"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:136px;heigth:150px" alt="Obaju logo" class="d-none d-md-inline-block"><img src="{{ asset('assets/img/front/logoWebUniestilos.jpg') }}" style="width:93px;heigth:60px" alt="Obaju logo" class="d-inline-block d-md-none"><span class="sr-only">Obaju - go to homepage</span></a>
+        <div class="container"><a href="index.html" class="navbar-brand home"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:136px;heigth:150px" alt="uniestilos logo" class="d-none d-md-inline-block"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:93px;heigth:60px" alt="uniestilos" class="d-inline-block d-md-none"><span class="sr-only">Uniestilos</span></a>
           <div class="navbar-buttons">
             <button type="button" data-toggle="collapse" data-target="#navigation" class="btn btn-outline-secondary navbar-toggler"><span class="sr-only">Toggle navigation</span><i class="fa fa-align-justify"></i></button>
             <button type="button" data-toggle="collapse" data-target="#search" class="btn btn-outline-secondary navbar-toggler"><span class="sr-only">Toggle search</span><i class="fa fa-search"></i></button><a href="basket.html" class="btn btn-outline-secondary navbar-toggler"><i class="fa fa-shopping-cart"></i></a>
@@ -90,8 +90,8 @@
                             <li class="nav-item"><a href="{{ url('frontend_articulo_por_subcategoria', {'urlAmigable': subcategoria.urlAmigable }) }}" class="nav-link">{{ subcategoria.nombre }}</a></li>
                           </ul>
                         {% else %}
-                          <ul> 
-                            <li>No hay subcategorias</li> 
+                          <ul class="list-unstyled mb-3"> 
+                            <li class="nav-item">No hay subcategorias</li> 
                           </ul>
                         {% endfor %}
                       </div>

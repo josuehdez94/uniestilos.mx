@@ -15,6 +15,20 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        dql:
+            string_functions:
+                    MATCH: App\Generales\MatchAgainst
+                    SOUNDEX: App\Generales\Soundex
+                    date: DoctrineExtensions\Query\Mysql\Date
+                    current_date: DoctrineExtensions\Query\Mysql\CurrentDate
+                    date_format: DoctrineExtensions\Query\Mysql\DateFormat
+                    timestampdiff: DoctrineExtensions\Query\Mysql\TimestampDiff
+                    datediff: DoctrineExtensions\Query\Mysql\DateDiff
+                    month: DoctrineExtensions\Query\Mysql\Month
+                    day: DoctrineExtensions\Query\Mysql\Day
+                    year: DoctrineExtensions\Query\Mysql\Year
+                    round: DoctrineExtensions\Query\Mysql\Round
+                    IF: DoctrineExtensions\Query\Mysql\IfElse
 
 when@test:
     doctrine:

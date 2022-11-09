@@ -1,0 +1,136 @@
+{% extends 'backend/Default/homePage.html.twig' %}
+{% block title %}Tallas{% endblock %}
+{% set menu = 'Articulos' %}
+{% set list = 'Tallas' %}
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_talla_index') }}">Tallas</a></li>
+                        <li><span>Lista Tallas</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="pages">
+                {{ knp_pagination_render(tallas, null, {}, {'size': 'small','rounded': true}) }}
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 text-right">
+            <span class="text-secondary">{{ tallas.getTotalItemCount ~ ' tallas' }}</span>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12 text-right">
+            <div class="invoice-buttons">
+                <a class="invoice-btn" href="{{ url('backend_talla_nueva') }}">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% for label, messages in app.flashes(['Editado', 'Eliminado', 'Creado']) %}
+        {% for message in messages %}
+            <div class="col-md-8">
+                <div class="alert {{ label == 'Editado' or label == 'Creado' or 'Eliminado' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show" role="alert" id="flashMessage">
+                    <strong>{{label}}</strong>, {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+        <script>
+            $("#flashMessage").fadeTo(7000, 500).slideUp(500, function () {
+                $("#flashMessage").alert('close');
+            });
+        </script>
+    {% endfor %}
+    <div class="table-responsive">
+        <table class="table table-sm table-hover mt-3">
+            <thead class="text-center thead-light">
+                <tr>
+                    <th>id</th>
+                    <th>Nombre</th>
+                    <th>No. Articulos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+            {% for talla in tallas %}
+                <tr style="font-size: 1em">
+                    <td>{{ talla.id }}</td>
+                    <td>{{ talla.nombre }}</td>
+                    <td>{{ talla.tallas|length }}</td>
+                    <td>
+                        <ul class="d-flex justify-content-center">
+                            <li class="mr-3">
+                                <a class="mx-2" href="{{ url('backend_talla_editar', {'id': talla.id}) }}">
+                                    <i class="fa fa-edit text-primary"></i>
+                                </a>
+                            </li>
+                            <li class="mr-3">
+                                <a class="mx-2 btnEliminar" data-id="{{ talla.id }}" data-name="{{ talla.nombre }}" data-value="{{ talla.tallas|length > 0 ? 'desactivar' : 'eliminar' }}">
+                                    <i class="ti-trash text-danger"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">No hay tallas</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pages pagination justify-content-center">
+        {{ knp_pagination_render(tallas, null, {}, {'size': 'small','rounded': true}) }}
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><span id="titulo"></span></h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="text-danger" id="mensaje"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <form method="POST" action="{{ url('backend_talla_eliminar') }}">
+                        <input type="hidden" value="0" name="id" class="data">
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.btnEliminar').click(function(e){
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            var accion = $(this).attr('data-value');
+            var nombre = $(this).attr('data-name');
+            if(accion == 'eliminar'){
+                $('#titulo').text('Eliminar talla ' + nombre);
+                $('#mensaje').text('¿Estas seguro(a) que quieres eliminar esta talla');
+            }else if(accion == 'desactivar'){
+                $('#titulo').text('Desactivar talla ' + nombre); 
+                $('#mensaje').text('Esta talla ya esta asignada en varios articulos, solo puedes desactivarla ¿quieres hacerlo?'); 
+            }
+            $('.data').val(id);
+            $('#modalEliminar').modal('show');
+        });
+    </script>
+</div>
+{% endblock %}
