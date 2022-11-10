@@ -102,8 +102,8 @@ class CategoriaController extends AbstractController
             throw $this->createNotFoundException('Categoria no encontrada.');
         }
         if ($this->isCsrfTokenValid('delete'.$categoria->getId(), $request->request->get('_token'))) {
-            if(count($categoria->getArticulos()) > 0) {
-                $this->addFlash('Error', 'No se puede eliminar la categoria porque contiene articulos');
+            if(count($categoria->getSubcategorias()) > 0) {
+                $this->addFlash('Error', 'No se puede eliminar la categoria porque ya tiene subcategorias creadas');
             }else {
                 $entityManager->remove($categoria);
                 $entityManager->flush();

@@ -53,7 +53,8 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Categoria</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ url('frontend_articulo_por_categoria', {'urlAmigable': articulo.subcategoria.categoria.urlAmigable }) }}">{{ articulo.subcategoria.categoria.nombre|title }}</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ url('frontend_articulo_por_subcategoria', {'urlAmigable': articulo.subcategoria.urlAmigable }) }}">{{ articulo.subcategoria.nombre|title }}</a></li>
                                     <li aria-current="page" class="breadcrumb-item active">{{ articulo.descripcion }}</li>
                                 </ol>
                             </nav>
@@ -103,7 +104,7 @@
                                             #imagenPrincipal img:active { cursor:url("{{asset('assets/img/front/grabbed.cur')}}"), default; }
                                         </style>
                                         <span class='zoom' id='imagenPrincipal'>
-                                            <img src="{{ articulo.fotografiaPrincipal ? articulo.fotografiaPrincipal.getWebNombreArchivo : asset('assets/img/noImage.png') }}" class="card-img-top" alt="..." id="imagenPrincipal-{{ articulo.id }}" style="max-width:650px;height:320px">
+                                            <img src="{{ articulo.fotografiaPrincipal ? articulo.fotografiaPrincipal.getWebNombreArchivoOriginal : asset('assets/img/noImage.png') }}" class="card-img-top" alt="..." id="imagenPrincipal-{{ articulo.id }}" style="max-width:650px;height:320px">
                                         </span>
                                         <script>
                                             $(document).ready(function(){        
@@ -112,16 +113,30 @@
                                             });
                                         </script>
                                     </div>
+                                    <div class="ribbon sale">
+                                        <div class="theribbon" style="font-size:0.7em">Nuevo</div>
+                                        <div class="ribbon-background"></div>
+                                    </div>
+                                    <div class="ribbon new">
+                                        <div class="theribbon" style="font-size:0.7em">Oferta</div>
+                                        <div class="ribbon-background"></div>
+                                    </div>
                                     <div class="card border-light mb-3">
                                         <div class="card-body">
                                             <div class="row">
                                                 {% for foto in articulo.fotografias %}
-                                                <div class="col-2 mx-5">
-                                                    <img src="{{ foto.getWebThumbnailNombreArchivo }}" class="card-img-top" alt="..." id="imagenChange-{{foto.id}}" style="height: 60px; width: 90px">
+                                                <div class="col-3 mx-0 imgThumbnail">
+                                                    <img src="{{ foto.getWebThumbnailNombreArchivo }}" class="img-thumbnail img-fluid border {{ foto.id == articulo.fotografiaPrincipal.id ? 'border-primary' : '' }}" alt="..." id="imagenChange-{{foto.id}}" style="height: 60px; cursor:pointer">
                                                         <script>
                                                         $( "#imagenChange-{{foto.id}}" ).click(function() {
-                                                            var url = "{{ foto.getWebNombreArchivo }}";
+                                                            var url = "{{ foto.getWebNombreArchivoOriginal }}";
                                                             $('#imagenPrincipal-{{ articulo.id }}').attr('src', url);
+                                                            $('.imgThumbnail img').each(function(index){
+                                                                if($(this).hasClass('border-primary')){
+                                                                    $(this).removeClass('border-primary');
+                                                                }
+                                                            });
+                                                            $(this).addClass('border-primary');
                                                             $('img[class="zoomImg"]').attr('src', url);
                                                         });
                                                     </script>

@@ -1,37 +1,38 @@
-{% extends 'home_page/homePage2.html.twig' %}
-{% block content %}
-    {#<div class="row alert alert-danger">
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
-            <h1><span class="fa fa-bug fa-4x"></span></h1>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 text-center">
-            <h1 clas="text-center">Algo salio mal</h1>
-            <p class="text-center">
-                Lo sentimos pero tenemos un problema con el sitio, un reporte ha 
-                sido enviado automaticamente para su reparación, por favor intentalo más tarde.
-            </p>
-            <p class="text-small">Error {{ status_code }}: {{ status_text }}</p>
-        </div>
-    </div>#}
-    <div id="all">
-        <div id="content">
+{% extends is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage.html.twig' : 'Frontend/Default/base.html.twig' %}
+{% if is_granted('ROLE_USER_BACK') %}
+    {% block content %}
+        <div class="error-area ptb--100 text-center">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <!-- breadcrumb-->
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
-                                <li aria-current="page" class="breadcrumb-item active">Pagina no encontrada</li>
-                            </ol>
-                        </nav>
-                        <div id="error-page" class="row">
-                            <div class="col-md-6 mx-auto">
-                                <div class="box text-center py-5">
-                                    <p class="text-center"><img src="img/logo.png" alt="Obaju template"></p>
-                                    <p class="text-center">Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
-                                    <p class="text-muted">Error {{ status_code }}: {{ status_text }}</p>
-                                    <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
+                <div class="error-content">
+                    <h2>Error {{ status_code }}: {{ status_text }}</h2>
+                    <p>Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
+                    <a href="index.html">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% else %}
+    {% block content %}
+        <div id="all">
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- breadcrumb-->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                                    <li aria-current="page" class="breadcrumb-item active">Pagina no encontrada</li>
+                                </ol>
+                            </nav>
+                            <div id="error-page" class="row">
+                                <div class="col-md-6 mx-auto">
+                                    <div class="box text-center py-5">
+                                        <p class="text-center"><img src="img/logo.png" alt="Obaju template"></p>
+                                        <p class="text-center">Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
+                                        <p class="text-muted">Error {{ status_code }}: {{ status_text }}</p>
+                                        <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -39,5 +40,5 @@
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
+{% endif %}

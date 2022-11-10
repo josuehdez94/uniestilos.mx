@@ -182,6 +182,23 @@ class ArticuloFotografia
         //return null === $this->nombreArchivo ? null : $this->getServerUrl() . $this->getUploadDirNombreArchivo() . '/' . $this->nombreArchivo;
     }
 
+    public function getWebNombreArchivoOriginal() {
+        if (file_exists($this->getAbsoluteNombreArchivo())) {
+            $array = [
+                '.jpg', 'png', 'jpeg'
+            ];
+            foreach($array as $tipo){
+                $nombreArchivo = pathinfo($this->nombreArchivo, PATHINFO_FILENAME);
+                if(file_exists($this->getUploadRootDirNombreArchivo().'/'.$nombreArchivo.$tipo)){
+                    return $this->getUploadDirNombreArchivo() . '/' . $nombreArchivo.$tipo;
+                }
+            }
+            return null === $this->nombreArchivo ? null :  $this->getUploadDirNombreArchivo() . '/' . $this->nombreArchivo;
+        } else {
+            return $this->getNoLogoImage();
+        }
+    }
+
     protected function getUploadRootDirNombreArchivo() {
         // the absolute directory picture where uploaded
         // documents should be saved
@@ -215,6 +232,17 @@ class ArticuloFotografia
          $nombreArchivoMiniThumb = $this->getAbsoluteNombreArchivoMiniThumb();
         if(file_exists($nombreArchivoMiniThumb)){
             unlink($nombreArchivoMiniThumb);
+        }
+        if (file_exists($this->getAbsoluteNombreArchivo())) {
+            $array = [
+                '.jpg', 'png', 'jpeg'
+            ];
+            foreach($array as $tipo){
+                $nombreArchivo = pathinfo($this->nombreArchivo, PATHINFO_FILENAME);
+                if(file_exists($this->getUploadRootDirNombreArchivo().'/'.$nombreArchivo.$tipo)){
+                    unlink($this->getUploadDirNombreArchivo() . '/' . $nombreArchivo.$tipo);
+                }
+            }
         }
     }
 }

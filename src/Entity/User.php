@@ -208,9 +208,9 @@ class User implements UserInterface , PasswordAuthenticatedUserInterface{
         }
         // guarantee every user at least has ROLE_USER
         if($this->tipoUser == 'C'){
-            $roles[] = 'ROLE_CLIENT';
-        }else if($this->tipoUser == 'E'){
             $roles[] = 'ROLE_USER';
+        }else if($this->tipoUser == 'E'){
+            $roles[] = 'ROLE_USER_BACK';
         }
 
         return array_unique($roles);

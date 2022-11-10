@@ -32,44 +32,32 @@ class ArticuloFotografiaController extends AbstractController
                 $nombreArchivo = $_FILES['fotografias']['name'][0];
                 list($ancho, $alto, $extension) = getimagesize($temp);
                 if ($ancho >= 1080 && $alto >= 720){
-                    /*if ($alto > 600 && $alto < 1000){ */
                         $nombreArchivoBd = hash('md5', date('Y-m-d g:i:s').random_int(0, 4000000)).'.'.substr($nombreArchivo,strrpos($nombreArchivo,'.')+1);
                         $this->subirFotografias($temp, $nombreArchivoBd);
                         $fotografia = new \App\Entity\ArticuloFotografia();
                         $fotografia->setArticulo($articulo);
                         $fotografia->setUsuarioSubio($this->getUser());
                         $fotografia->setFechaHoraCreacion(new \DateTime());
-                        if($tipo == 'image/jpeg'){
-                            $fotografia->setNombreArchivo(substr($nombreArchivoBd,0,-4).'webp');
-                        }else{
-                            $fotografia->setNombreArchivo(substr($nombreArchivoBd,0,-3).'webp');
-                        }
+                        $nombre = pathinfo($nombreArchivoBd, PATHINFO_FILENAME);
+                        $fotografia->setNombreArchivo($nombre.'.webp');
                         $entityManager->persist($fotografia);
                         $entityManager->flush();
                         if(count($articulo->getFotografias()) == 1){
                             $articulo->setFotografiaPrincipal($fotografia);
                         }
                         $imagenesSubidas = $imagenesSubidas + 1;
-                   /*  }else{
-                        $erroresTamaño [] = [
-                            'archivo' => $nombreArchivo,
-                            'alto' => $alto,
-                            'error' => 'El alto de esta imagen no es el correcto'
-                        ];
-                    }*/
                }else{
                    $erroresTamaño [] = [
                        'archivo' => $nombreArchivo,
                        'error' => 'El tamaño de la imagen '.$nombreArchivo.' no esta en resolucion HD(1080x720), tiene una resolución de '.$alto. ' x '.$ancho
                    ];
                }
-           }/* else{
-                $erroresTipo [] = [
+           }else{
+                $erroresTamaño [] = [
                     'archivo' => $temp,
-                    'tipo' => $tipo,
-                    'error' => 'El tipo imagen no es el correcto'
+                    'error' => 'El tipo de archivo no es valido para la imagen '.$temp.' solo se aceptan archivos (jpeg, jpg y png)'
                 ];
-           }  */
+           }
 
         }
         if($imagenesSubidas > 0){
@@ -87,8 +75,7 @@ class ArticuloFotografiaController extends AbstractController
     /**
      * @Route("/editar/{id}", name="backend_articulo_fotografia_editar", methods={"GET", "POST"})
      */
-    public function editarFotografias($id){
-        $entityManager = $this->getDoctrine()->getManager();
+    public function editarFotografias(EntityManagerInterface $entityManager, $id){
         $articulo = $entityManager->getRepository(\App\Entity\Articulo::class)->findOneBy(['id' => $id]);
         if(!$articulo){
             throw $this->createNotFoundException('Articulo no encontrado');
@@ -102,9 +89,8 @@ class ArticuloFotografiaController extends AbstractController
     /**
      * @Route("/eliminar/{id}", name="backend_articulo_fotografia_eliminar", methods={"POST"})
      */
-    public function eliminarFotografia($id)
+    public function eliminarFotografia(EntityManagerInterface $entityManager, $id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
         $foto = $entityManager->getRepository(\App\Entity\ArticuloFotografia::class)->findOneById($id);
         if (!$foto){
             throw $this->createNotFoundException('Foto no encontrada.');
@@ -271,10 +257,10 @@ class ArticuloFotografiaController extends AbstractController
             '.jpg', 'png'
         ];
         foreach($array as $tipo){
-            $nombreArchivoOriginal = $this->getUploadRootDirNombreArchivo().'/'.$nombreArchivo.$tipo;
+            /* $nombreArchivoOriginal = $this->getUploadRootDirNombreArchivo().'/'.$nombreArchivo.$tipo;
             if(file_exists($nombreArchivoOriginal)){
                 unlink($nombreArchivoOriginal);
-            }
+            } */
             /* imagen thumb */
             $nombreArchivoThumb = $this->getUploadRootDirNombreArchivo().'/thumbs/'.$nombreArchivo.$tipo;
             if(file_exists($nombreArchivoThumb)){
