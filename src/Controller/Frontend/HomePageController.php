@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\CategoriaRepository;
 
 class HomePageController extends AbstractController
 {
@@ -43,12 +45,21 @@ class HomePageController extends AbstractController
     /**
      * 
      */
-    public function navbar(int $max = 3): Response
+    public function navbar(EntityManagerInterface $entityManager, CategoriaRepository $categoriaRepository, int $max = 3): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $categorias = $entityManager->getRepository(Categoria::class)->findAll();
+        $categorias = $categoriaRepository->findAll();
+        $categoriasHombre = $categoriaRepository->getCategoriasPorClasificacion('Hombre'); 
+        $categoriasMujer = $categoriaRepository->getCategoriasPorClasificacion('Mujer'); 
+        $categoriasNiño = $categoriaRepository->getCategoriasPorClasificacion('Niño'); 
+        $categoriasNiña = $categoriaRepository->getCategoriasPorClasificacion('Niña'); 
+        $categoriasUnisex = $categoriaRepository->getCategoriasPorClasificacion('Unisex'); 
         return $this->render('home_page/navbar.html.twig', [
             'categorias' => $categorias,
+            'categoriasHombre' => $categoriasHombre,
+            'categoriasMujer' => $categoriasMujer,
+            'categoriasNiño' => $categoriasNiño,
+            'categoriasNiña' => $categoriasNiña,
+            'categoriasUnisex' => $categoriasUnisex,
             'max' => $max
         ]); 
 
@@ -57,9 +68,14 @@ class HomePageController extends AbstractController
     /**
      * 
      */
-    public function footer(int $max = 3): Response
+    public function footer(EntityManagerInterface $entityManager, CategoriaRepository $categoriaRepository, int $max = 3): Response
     {
-        return $this->render('home_page/footer.html.twig'); 
+        $categoriasHombre = $categoriaRepository->getCategoriasPorClasificacion('Hombre'); 
+        $categoriasMujer = $categoriaRepository->getCategoriasPorClasificacion('Mujer');
+        return $this->render('home_page/footer.html.twig', [
+            'categoriasHombre' => $categoriasHombre,
+            'categoriasMujer' => $categoriasMujer
+        ]); 
 
     }
 }

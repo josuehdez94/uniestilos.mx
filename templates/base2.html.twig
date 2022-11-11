@@ -1,5 +1,14 @@
 <html>
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WSN70N6NN7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-WSN70N6NN7');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Inicio{% endblock %}</title>
@@ -19,6 +28,7 @@
         {#<link rel="stylesheet" href="{{ asset('css/custom.css') }}">#}
         <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.css') }}">
+        <link rel="stylesheet" href="{{ asset('srtdash/assets/css/themify-icons.css') }}">
    
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         {#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
@@ -58,14 +68,14 @@
             
         });
         /* efecto nieve en el sitio*/
-        /*$(document).ready( function(){
+        $(document).ready( function(){
             $.fn.snow({
             minSize: 10, //Tamaño mínimo del copo de nieve, 10 por defecto
             maxSize: 20, //Tamaño máximo del copo de nieve, 10 por defecto
             newOn: 300, //Frecuencia (en milisegundos) con la que aparecen los copos de nieve, 500 por defecto
-            flakeColor: '#FFFFFF' //Color del copo de nieve, #FFFFFF por defecto
+            flakeColor: '#76d7c4' //Color del copo de nieve, #FFFFFF por defecto
             });
-        });*/
+        });
     </script>
 </a>
 <div class="information d-none">

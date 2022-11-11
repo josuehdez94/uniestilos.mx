@@ -7,18 +7,16 @@
       <div id="top">
         <div class="container">
           <div class="row">
-            <div class="col-lg-6 offer mb-3 mb-lg-0"><a href="#" class="btn btn-success btn-sm">Oferta del dia</a><a href="#" class="ml-1">5% de descuento en toda la tienda</a></div>
+            <div class="col-lg-6 offer mb-3 mb-lg-0 form-inline">
+              <span class="btn btn-info btn-sm">Temporada navideña</span>
+              <i class="fa-solid fa-gift fa-2x ml-4"></i>
+            </div>
             <div class="col-lg-6 text-center text-lg-right">
               <ul class="menu list-inline mb-0">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="list-inline-item text-light"><h6>Hola <b>{{ app.user.nombre|capitalize }}</b></h6></li>
                 <li class="list-inline-item text-light">
                     <div class="btn-group dropright mt-1" style="z-index:10">
-                       
-                            {#<button class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-hover="dropdown" aria-haspopup="true" aria-expanded="false">
-                             Mi cuenta
-                            </button>#}
-                           
                             <a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200"><h6>Mi cuenta<b class="caret"></b></h6></a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <small><a class="dropdown-item text-dark" href="{{ url('front_cliente_index_compra', {'user_uid': app.user.uid, 'crypt': app.user.crypt }) }}">Mis compras</a></small>
@@ -70,7 +68,7 @@
         
       </div>
       <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="z-index:1">
-        <div class="container"><a href="index.html" class="navbar-brand home"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:136px;heigth:150px" alt="uniestilos logo" class="d-none d-md-inline-block"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:93px;heigth:60px" alt="uniestilos" class="d-inline-block d-md-none"><span class="sr-only">Uniestilos</span></a>
+        <div class="container"><a href="{{ url('frontend_home_page') }}" class="navbar-brand home"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:136px;heigth:150px" alt="uniestilos logo" class="d-none d-md-inline-block"><img src="{{ asset('assets/img/front/logoWebUniestilos.png') }}" style="width:93px;heigth:60px" alt="uniestilos" class="d-inline-block d-md-none"><span class="sr-only">Uniestilos</span></a>
           <div class="navbar-buttons">
             <button type="button" data-toggle="collapse" data-target="#navigation" class="btn btn-outline-secondary navbar-toggler"><span class="sr-only">Toggle navigation</span><i class="fa fa-align-justify"></i></button>
             <button type="button" data-toggle="collapse" data-target="#search" class="btn btn-outline-secondary navbar-toggler"><span class="sr-only">Toggle search</span><i class="fa fa-search"></i></button><a href="basket.html" class="btn btn-outline-secondary navbar-toggler"><i class="fa fa-shopping-cart"></i></a>
@@ -96,137 +94,94 @@
                         {% endfor %}
                       </div>
                       {% endfor %}
-                      {# <div class="col-md-6 col-lg-3">
-                        <h5>Shoes</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Casual</a></li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6 col-lg-3">
-                        <h5>Accessories</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Casual</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Casual</a></li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6 col-lg-3">
-                        <h5>Featured</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                        </ul>
-                        <h5>Looks and trends</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                        </ul>
-                      </div> #}
                     </div>
                   </li>
                 </ul>
               </li>
-              <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Esencias<b class="caret"></b></a>
+              <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Mujer<b class="caret"></b></a>
                 <ul class="dropdown-menu megamenu">
                   <li>
                     <div class="row">
+                      {% for categoriaMujer in categoriasMujer %}
                       <div class="col-md-6 col-lg-3">
-                        <h5>Clothing</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">T-shirts</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Shirts</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Pants</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Accessories</a></li>
-                        </ul>
+                        <h5><a href="{{ url('frontend_articulo_por_categoria', {'urlAmigable': categoriaMujer.urlAmigable }) }}">{{ categoriaMujer.nombre }}</a></h5>
+                        {% for subcategoriaMujer in categoriaMujer.subcategorias %}
+                          <ul class="list-unstyled mb-3">
+                            <li class="nav-item"><a href="{{ url('frontend_articulo_por_subcategoria', {'urlAmigable': subcategoriaMujer.urlAmigable }) }}" class="nav-link">{{ subcategoriaMujer.nombre }}</a></li>
+                          </ul>
+                        {% else %}
+                          <ul class="list-unstyled mb-3"> 
+                            <li class="nav-item">No hay subcategorias</li> 
+                          </ul>
+                        {% endfor %}
                       </div>
-                      <div class="col-md-6 col-lg-3">
-                        <h5>Shoes</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Casual</a></li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6 col-lg-3">
-                        <h5>Accessories</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Casual</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Casual</a></li>
-                        </ul>
-                        <h5>Looks and trends</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="category.html" class="nav-link">Trainers</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Sandals</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Hiking shoes</a></li>
-                        </ul>
-                      </div>
-                      <div class="col-md-6 col-lg-3">
-                        <div class="banner"><a href="#"><img src="img/banner.jpg" alt="" class="img img-fluid"></a></div>
-                        <div class="banner"><a href="#"><img src="img/banner2.jpg" alt="" class="img img-fluid"></a></div>
-                      </div>
+                      {% endfor %}
                     </div>
                   </li>
                 </ul>
               </li>
-              <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Productos comestibles<b class="caret"></b></a>
+              <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Hombre<b class="caret"></b></a>
                 <ul class="dropdown-menu megamenu">
                   <li>
                     <div class="row">
+                      {% for categoriaHombre in categoriasHombre %}
                       <div class="col-md-6 col-lg-3">
-                        <h5>Shop</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="index.html" class="nav-link">Homepage</a></li>
-                          <li class="nav-item"><a href="category.html" class="nav-link">Category - sidebar left</a></li>
-                          <li class="nav-item"><a href="category-right.html" class="nav-link">Category - sidebar right</a></li>
-                          <li class="nav-item"><a href="category-full.html" class="nav-link">Category - full width</a></li>
-                          <li class="nav-item"><a href="detail.html" class="nav-link">Product detail</a></li>
-                        </ul>
+                        <h5><a href="{{ url('frontend_articulo_por_categoria', {'urlAmigable': categoriaHombre.urlAmigable }) }}">{{ categoriaHombre.nombre }}</a></h5>
+                        {% for subcategoriaHombre in categoriaHombre.subcategorias %}
+                          <ul class="list-unstyled mb-3">
+                            <li class="nav-item"><a href="{{ url('frontend_articulo_por_subcategoria', {'urlAmigable': subcategoriaHombre.urlAmigable }) }}" class="nav-link">{{ subcategoriaHombre.nombre }}</a></li>
+                          </ul>
+                        {% else %}
+                          <ul class="list-unstyled mb-3"> 
+                            <li class="nav-item">No hay subcategorias</li> 
+                          </ul>
+                        {% endfor %}
                       </div>
+                      {% endfor %}
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Niña<b class="caret"></b></a>
+                <ul class="dropdown-menu megamenu">
+                  <li>
+                    <div class="row">
+                      {% for categoriaNiña in categoriasNiña %}
                       <div class="col-md-6 col-lg-3">
-                        <h5>User</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="register.html" class="nav-link">Register / login</a></li>
-                          <li class="nav-item"><a href="customer-orders.html" class="nav-link">Orders history</a></li>
-                          <li class="nav-item"><a href="customer-order.html" class="nav-link">Order history detail</a></li>
-                          <li class="nav-item"><a href="customer-wishlist.html" class="nav-link">Wishlist</a></li>
-                          <li class="nav-item"><a href="customer-account.html" class="nav-link">Customer account / change password</a></li>
-                        </ul>
+                        <h5><a href="{{ url('frontend_articulo_por_categoria', {'urlAmigable': categoriaNiña.urlAmigable }) }}">{{ categoriaNiña.nombre }}</a></h5>
+                        {% for subcategoriaNiña in categoriaNiña.subcategorias %}
+                          <ul class="list-unstyled mb-3">
+                            <li class="nav-item"><a href="{{ url('frontend_articulo_por_subcategoria', {'urlAmigable': subcategoriaNiña.urlAmigable }) }}" class="nav-link">{{ subcategoriaNiña.nombre }}</a></li>
+                          </ul>
+                        {% else %}
+                          <ul class="list-unstyled mb-3"> 
+                            <li class="nav-item">No hay subcategorias</li> 
+                          </ul>
+                        {% endfor %}
                       </div>
+                      {% endfor %}
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Niño<b class="caret"></b></a>
+                <ul class="dropdown-menu megamenu">
+                  <li>
+                    <div class="row">
+                      {% for categoriaNiño in categoriasNiño %}
                       <div class="col-md-6 col-lg-3">
-                        <h5>Order process</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="basket.html" class="nav-link">Shopping cart</a></li>
-                          <li class="nav-item"><a href="checkout1.html" class="nav-link">Checkout - step 1</a></li>
-                          <li class="nav-item"><a href="checkout2.html" class="nav-link">Checkout - step 2</a></li>
-                          <li class="nav-item"><a href="checkout3.html" class="nav-link">Checkout - step 3</a></li>
-                          <li class="nav-item"><a href="checkout4.html" class="nav-link">Checkout - step 4</a></li>
-                        </ul>
+                        <h5><a href="{{ url('frontend_articulo_por_categoria', {'urlAmigable': categoriaNiño.urlAmigable }) }}">{{ categoriaNiño.nombre }}</a></h5>
+                        {% for subcategoriaNiño in categoriaNiño.subcategorias %}
+                          <ul class="list-unstyled mb-3">
+                            <li class="nav-item"><a href="{{ url('frontend_articulo_por_subcategoria', {'urlAmigable': subcategoriaNiño.urlAmigable }) }}" class="nav-link">{{ subcategoriaNiño.nombre }}</a></li>
+                          </ul>
+                        {% else %}
+                          <ul class="list-unstyled mb-3"> 
+                            <li class="nav-item">No hay subcategorias</li> 
+                          </ul>
+                        {% endfor %}
                       </div>
-                      <div class="col-md-6 col-lg-3">
-                        <h5>Pages and blog</h5>
-                        <ul class="list-unstyled mb-3">
-                          <li class="nav-item"><a href="blog.html" class="nav-link">Blog listing</a></li>
-                          <li class="nav-item"><a href="post.html" class="nav-link">Blog Post</a></li>
-                          <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
-                          <li class="nav-item"><a href="text.html" class="nav-link">Text page</a></li>
-                          <li class="nav-item"><a href="text-right.html" class="nav-link">Text page - right sidebar</a></li>
-                          <li class="nav-item"><a href="404.html" class="nav-link">404 page</a></li>
-                          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                        </ul>
-                      </div>
+                      {% endfor %}
                     </div>
                   </li>
                 </ul>

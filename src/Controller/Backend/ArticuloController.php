@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 #formularios
 use App\Form\Backend\Articulo\ArticuloType;
@@ -62,14 +63,14 @@ class ArticuloController extends AbstractController
     /**
      * @Route("/nuevo", name="backend_articulo_nuevo", methods={"GET","POST"})
      */
-    public function nuevoArticulo(Request $request): Response
+    public function nuevoArticulo(Request $request, EntityManagerInterface $entityManager): Response
     {
         $articulo = new Articulo();
         $form = $this->createForm(ArticuloType::class, $articulo, ['categoria' => null]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $articulo->setUsuarioCreador($this->getUser());
             $entityManager->persist($articulo);
             $entityManager->flush();
             $this->addFlash('Creado', 'Articulo creado correctamente');
@@ -85,9 +86,8 @@ class ArticuloController extends AbstractController
     /**
      * @Route("/detalles/{id}", name="backend_articulo_detalles", methods={"GET"})
      */
-    public function detallesArticulo($id): Response
+    public function detallesArticulo(EntityManagerInterface $entityManager, $id): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
         $articulo = $entityManager->getRepository(\App\Entity\Articulo::class)->findOneBy(['id' => $id]);
         if(!$articulo){
             throw $this->createNotFoundException('Articulo no encontrado');
@@ -100,9 +100,8 @@ class ArticuloController extends AbstractController
     /**
      * @Route("/editar/generales/{id}", name="backend_articulo_editar", methods={"GET","POST"})
      */
-    public function editarArticulo(Request $request, $id): Response
+    public function editarArticulo(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
         $articulo = $entityManager->getRepository(Articulo::class)->findOneBy(['id' => $id]);
         if(!$articulo){
             throw $this->createNotFoundException('Articulo no encontrado');
@@ -129,10 +128,9 @@ class ArticuloController extends AbstractController
     /**
      * @Route("/{id}", name="articulo_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Articulo $articulo): Response
+    public function delete(Request $request, Articulo $articulo, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$articulo->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($articulo);
             $entityManager->flush();
         }

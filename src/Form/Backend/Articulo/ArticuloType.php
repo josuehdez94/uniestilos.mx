@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvent;
@@ -46,6 +47,18 @@ class ArticuloType extends AbstractType
                 'help' => 'Al marcar este campo el articulo aparecera en la pagina principal para poder ser comprado sobre pedido.',
                 'label' => '¿Sobre pedido?',
                 'attr' => ['class' => 'form-check-input']
+            ])
+            ->add('clasificacion', ChoiceType::class, [
+                'placeholder' => 'Selecciona',
+                'attr' => ['class' => 'form-control form-control-sm'],
+                'help' => 'Selecciona para que tipo de persona va dirigido este articulo.',
+                'choices'  => [
+                    'Hombre' => 'Hombre',
+                    'Mujer' => 'Mujer',
+                    'Niño' => 'Niña',
+                    'Niña' => 'Niño',
+                    'Unisex' => 'Unisex'
+                ],
             ])
             
         ;

@@ -1,5 +1,6 @@
-{% extends is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage.html.twig' : 'Frontend/Default/base.html.twig' %}
-{% block title %}Error{% endblock title %}
+{# {% extends is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage.html.twig' : 'Frontend/Default/base.html.twig' %} #}
+{% extends not is_granted('IS_AUTHENTICATED_FULLY') ? 'home_page/homePage2.html.twig' : is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage.html.twig' : 'home_page/homePage2.html.twig' %}
+{% block title %}Error 404{% endblock title %}
 {% if is_granted('ROLE_USER_BACK') %}
     {% block content %}
         <div class="error-area ptb--100 text-center">
@@ -42,4 +43,34 @@
             </div>
         </div>
     {% endblock %}
-{% endif %}
+{% endif %} #}
+
+{% block body %}
+        <div id="all">
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- breadcrumb-->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                                    <li aria-current="page" class="breadcrumb-item active">Página no encontrada</li>
+                                </ol>
+                            </nav>
+                            <div id="error-page" class="row">
+                                <div class="col-md-6 mx-auto">
+                                    <div class="box text-center py-5">
+                                        <p class="text-center"><img src="img/logo.png" alt="Obaju template"></p>
+                                        <h3>Lo sentimos, página no disponible</h3>
+                                        <h4 class="text-muted">Error {{ status_code }}: {{ status_text }}</h4>
+                                        <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

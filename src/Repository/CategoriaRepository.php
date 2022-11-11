@@ -48,5 +48,21 @@ class CategoriaRepository extends ServiceEntityRepository
     }
     */
 
-   
+    /**
+     * funcion que devuelve las categorias por clasificacion
+     */
+    public function getCategoriasPorClasificacion($value)
+    {
+        return $this->createQueryBuilder('categoria')
+            ->select('categoria')
+            ->innerJoin('categoria.subcategorias', 'subcategoria')
+            ->innerJoin('subcategoria.articulos', 'articulo')
+            ->andWhere('articulo.clasificacion = :val')
+            ->setParameter('val', $value)
+            ->orderBy('categoria.id', 'ASC')
+            ->groupBy('categoria.id')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

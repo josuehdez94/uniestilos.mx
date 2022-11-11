@@ -33,13 +33,14 @@ class Articulo
 
     /**
      * @ORM\Column(name="sku", type="string", length=30, unique=true)
-     * @Assert\NotNull(groups={"backend_articulo_nuevo", "backend_articulo_editar"})
+     * @Assert\NotNull(message="este campo no debe estar nulo", groups={"backend_articulo_nuevo", "backend_articulo_editar"})
      * @Assert\Unique
      */
     private $sku;
 
     /**
      * @ORM\Column(name="precio1", type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotNull(message="este campo no debe estar nulo", groups={"backend_articulo_nuevo", "backend_articulo_editar"})
      * @Assert\Type(
      *     type="integer",
      *     message="EL valor {{ value }} no es valido {{ type }}."
@@ -63,7 +64,7 @@ class Articulo
 
     /**
      * @ORM\Column(name="descripcion", type="string", length=255)
-     * @Assert\NotNull(groups={"backend_articulo_nuevo", "backend_articulo_editar"})
+     * @Assert\NotNull(message="este campo no debe estar nulo", groups={"backend_articulo_nuevo", "backend_articulo_editar"})
      * @Assert\Length(
      *      min = 10,
      *      max = 255,
@@ -151,6 +152,12 @@ class Articulo
      * @ORM\Column(type="boolean")
      */
     private $sobrePedido = true;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotNull(message="este campo no debe estar nulo", groups={"backend_articulo_nuevo", "backend_articulo_editar"})
+     */
+    private $clasificacion;
 
     public function __construct()
     {
@@ -465,6 +472,18 @@ class Articulo
     public function setSobrePedido(bool $sobrePedido): self
     {
         $this->sobrePedido = $sobrePedido;
+
+        return $this;
+    }
+
+    public function getClasificacion()
+    {
+        return $this->clasificacion;
+    }
+
+    public function setClasificacion($clasificacion)
+    {
+        $this->clasificacion = $clasificacion;
 
         return $this;
     }

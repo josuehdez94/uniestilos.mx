@@ -1,5 +1,18 @@
-{% extends is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage.html.twig' : 'Frontend/Default/base.html.twig' %}
-{% if is_granted('ROLE_USER_BACK') %}
+{# {% extends not is_granted('IS_AUTHENTICATED_FULLY') ? 'home_page/homePage2.html.twig' : is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage8.html.twig' : 'home_page/homePage2.html.twig' %} #}
+{# {% if is_granted('IS_AUTHENTICATED_FULLY') %} #}
+    {% extends 'backend/Default/homePage.html.twig' %}
+{# {% else %}
+    {% extends 'home_page/homePage2.html.twig' %}
+{% endif %} #}
+{% set route = app.request.attributes.get('_route')|split('/') %}
+{% if app.user is not null %}
+    {% set respuesta = 'Si' %}
+{% else %}
+    {% set respuesta = 'No' %}
+{% endif %}
+{% block title %}{{ respuesta }}{% endblock title %}
+{# {% extends 'base.html.twig' %} #}
+{# {% if is_granted('ROLE_USER_BACK') %}
     {% block content %}
         <div class="error-area ptb--100 text-center">
             <div class="container">
@@ -41,4 +54,37 @@
             </div>
         </div>
     {% endblock %}
-{% endif %}
+{% endif %} #}
+
+{% block content %}
+        <div id="all">
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- breadcrumb-->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                                    <li aria-current="page" class="breadcrumb-item active">Pagina no encontrada</li>
+                                </ol>
+                            </nav>
+                            <div id="error-page" class="row">
+                                <div class="col-md-6 mx-auto">
+                                    <div class="box text-center py-5">
+                                        <p class="text-center"><img src="img/logo.png" alt="Obaju template"></p>
+                                        <p class="text-center">Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
+                                        <p class="text-muted">Error {{ status_code }}: {{ app.user.id }} </p>
+                                        <p class="text-muted">
+                                            hola
+                                        </p>
+                                        <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
