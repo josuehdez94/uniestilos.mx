@@ -185,7 +185,7 @@ class ArticuloFotografia
     public function getWebNombreArchivoOriginal() {
         if (file_exists($this->getAbsoluteNombreArchivo())) {
             $array = [
-                '.jpg', 'png', 'jpeg'
+                '.jpg', '.png', '.jpeg'
             ];
             foreach($array as $tipo){
                 $nombreArchivo = pathinfo($this->nombreArchivo, PATHINFO_FILENAME);
@@ -235,7 +235,7 @@ class ArticuloFotografia
         }
         if (file_exists($this->getAbsoluteNombreArchivo())) {
             $array = [
-                '.jpg', 'png', 'jpeg'
+                '.jpg', '.png', '.jpeg'
             ];
             foreach($array as $tipo){
                 $nombreArchivo = pathinfo($this->nombreArchivo, PATHINFO_FILENAME);

@@ -8,8 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Articulo;
 use App\Entity\Categoria;
+use App\Entity\HistorialBusqueda;
 use App\Entity\Subcategoria;
 use App\Repository\ArticuloRepository;
+use App\Repository\CategoriaRepository;
 //use Knp\Component\Pager\Pagination\PaginatorInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,28 +35,17 @@ class ArticuloController extends AbstractController
     /**
      * @Route("/detalles/{urlAmigable}", name="frontend_articulo_detalles", methods={"GET"})
      */
-    public function detallesArticulo($urlAmigable)
+    public function detallesArticulo(EntityManagerInterface $entityManager, $urlAmigable)
     {   
-        $entityManager = $this->getDoctrine()->getManager();
         $articulo = $entityManager->getRepository(Articulo::class)->findOneBy(['urlAmigable' => $urlAmigable]);
         if (!$articulo){
             throw $this->createNotFoundException('Articulo no encontrado.');
         }
-        #token MP
-        $sdk = new \MercadoPago\SDK();
-        $token = $sdk::setAccessToken('TEST-723413152291982-102921-c6c27b339ebb97114cb527fc63436a3d-264821330');
-        #Crea un objeto de preferencia
-        $preference = new \MercadoPago\Preference();
-        #Crea un ítem en la preferencia
-        $item = new \MercadoPago\Item();
-        $item->title = $articulo->getDescripcion();
-        $item->quantity = 1;
-        $item->unit_price = $articulo->getPrecio1();
-        $preference->items = array($item);
-        $preference->save();
+        if($articulo->getActivo() == false){
+            throw $this->createNotFoundException('Articulo no disponible.'); 
+        }
         return $this->render('Frontend/Articulo/detallesArticulo.html.twig', [
             'articulo' => $articulo,
-            'preference' => $preference
         ]);
     }
 
@@ -96,5 +87,64 @@ class ArticuloController extends AbstractController
             'articulos' => $articulos,
             'subcategoria' => $subcategoria
         ]);
+    }
+
+    /**
+     * @Route("/buscar/", name="frontend_articulo_buscar", methods={"GET"})
+     */
+    public function buscador(Request $request, PaginatorInterface $paginator, ArticuloRepository $articuloRepository, CategoriaRepository $categoriaRepository, EntityManagerInterface $entityManager)
+    {   
+        # se limpia el parametro que no traiga mas de 1 espacio en blanco entre cada palabra
+        $q = $request->get('busqueda');
+        # se eliminan espacios multiples entre palabras
+        $q = preg_replace('/\s+/', ' ', $q);
+        # se eliminan caracteres que no sean letras y numeros y un espacio al final para que respete espacios simples
+        $q = preg_replace('([^A-Za-z0-9/_Ññ] )', "", $q);
+        # se eliminan espacios al inicio o final
+        $q = trim($q);
+        $articulos = null;
+        if (!empty($q)) {
+            #generar historial de busqueda
+            $historial = $entityManager->getRepository(HistorialBusqueda::class)->findOneBy(['termino' => $q]);
+            if($historial){
+                $historial->setNumeroBusquedas($historial->getNumeroBusquedas() + 1);
+                $historial->setFechaHoraUltimaBusqueda(new \DateTime());
+            }else{
+                $historial = new HistorialBusqueda();
+                $historial->setTermino($q);
+                $historial->setNumeroBusquedas(1);
+                $historial->setFechaHoraUltimaBusqueda(new \DateTime());
+                $entityManager->persist($historial);
+            }
+            $entityManager->flush();
+            $busqueda = $articuloRepository->busquedaAvanzadaFront($q);
+            $articulos = $paginator->paginate(
+                $busqueda['busqueda'],
+                $request->query->getInt('pagina', 1),
+                100
+            );
+            #filtros para busquedas
+            $clasificaciones = $articuloRepository->getClasificacionesParaFiltros($busqueda['articulos']);
+            $categorias = [];
+            foreach($clasificaciones as $clasificacion){
+                $categoria = $categoriaRepository->getCategoriasPorClasificacion($clasificacion['clasificacion']);
+                $categorias = $categoria;
+            }
+            /* dump($categorias);
+            exit(); */
+            return $this->render('Frontend/Articulo/buscador.html.twig', [
+                'articulos' => $articulos,
+                'busqueda' => $q,
+                'clasificaciones' => $clasificaciones,
+                'categorias' => $categorias
+            ]);
+        }
+        return $this->render('Frontend/Articulo/buscador.html.twig', [
+            'articulos' => $articulos,
+            'busqueda' => $q,
+            'clasificaciones' => null,
+            'categorias' => null
+        ]);
+        
     }
 }

@@ -33,12 +33,12 @@ class ArticuloFotografiaController extends AbstractController
                 list($ancho, $alto, $extension) = getimagesize($temp);
                 if ($ancho >= 1080 && $alto >= 720){
                         $nombreArchivoBd = hash('md5', date('Y-m-d g:i:s').random_int(0, 4000000)).'.'.substr($nombreArchivo,strrpos($nombreArchivo,'.')+1);
-                        $this->subirFotografias($temp, $nombreArchivoBd);
+                        $nombre = pathinfo($nombreArchivoBd, PATHINFO_FILENAME);
+                        $this->subirFotografias($temp, $nombreArchivoBd, $nombre);
                         $fotografia = new \App\Entity\ArticuloFotografia();
                         $fotografia->setArticulo($articulo);
                         $fotografia->setUsuarioSubio($this->getUser());
                         $fotografia->setFechaHoraCreacion(new \DateTime());
-                        $nombre = pathinfo($nombreArchivoBd, PATHINFO_FILENAME);
                         $fotografia->setNombreArchivo($nombre.'.webp');
                         $entityManager->persist($fotografia);
                         $entityManager->flush();
@@ -125,7 +125,7 @@ class ArticuloFotografiaController extends AbstractController
     /**
      * funcion para subir imagenes al servidor
      */
-    public function subirFotografias($temp, $nombreArchivo)
+    public function subirFotografias($temp, $nombreArchivo, $nombre)
     {
 
         // you must throw an exception here if the file cannot be moved
@@ -225,7 +225,7 @@ class ArticuloFotografiaController extends AbstractController
             //echo "Imagen en: " . $this->getMiniThumbnailNombreArchivo();
             //echo "Proceso finalizado." . '</br>';
             //exit();
-            shell_exec('bash image.sh '.$nombreArchivo.' '.substr($nombreArchivo, 0, -3).'webp');
+            shell_exec('bash image.sh '.$nombreArchivo.' '.$nombre.'.webp');
             $this->eliminarFotografiaArticulo(substr($nombreArchivo, 0, -3));
         } catch (Exception $ex) {
             echo $ex . '</br>';
@@ -254,7 +254,7 @@ class ArticuloFotografiaController extends AbstractController
     public function eliminarFotografiaArticulo($nombreArchivo){
         /* imagen original */
         $array = [
-            '.jpg', 'png'
+            '.jpg', '.png', '.jpeg'
         ];
         foreach($array as $tipo){
             /* $nombreArchivoOriginal = $this->getUploadRootDirNombreArchivo().'/'.$nombreArchivo.$tipo;

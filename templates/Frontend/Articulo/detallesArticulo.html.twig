@@ -128,7 +128,7 @@
                                                 <div class="col-3 mx-0 imgThumbnail">
                                                     <img src="{{ foto.getWebThumbnailNombreArchivo }}" class="img-thumbnail img-fluid border {{ foto.id == articulo.fotografiaPrincipal.id ? 'border-primary' : '' }}" alt="..." id="imagenChange-{{foto.id}}" style="height: 60px; cursor:pointer">
                                                         <script>
-                                                        $( "#imagenChange-{{foto.id}}" ).click(function() {
+                                                        $( "#imagenChange-{{foto.id}}" ).hover(function() {
                                                             var url = "{{ foto.getWebNombreArchivoOriginal }}";
                                                             $('#imagenPrincipal-{{ articulo.id }}').attr('src', url);
                                                             $('.imgThumbnail img').each(function(index){
