@@ -258,7 +258,7 @@ class ArticuloRepository extends ServiceEntityRepository
 
     /**
      * funcion para obtener articulos por una categoria en especifico
-     * @param categoria
+     * @param articulos
      */
     public function getClasificacionesParaFiltros($articulos)
     {
