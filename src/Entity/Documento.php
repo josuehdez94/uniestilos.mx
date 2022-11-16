@@ -128,11 +128,18 @@ class Documento
      */
     private $entregado;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $referenciaExterna;
+
     public function __construct()
     {
+        $fechaActual = new \DateTime();
         $this->registros = new ArrayCollection();
-        $this->fechaHoraCreacion = new \DateTime();
+        $this->fechaHoraCreacion = $fechaActual;
         $this->pagos = new ArrayCollection();
+        $this->referenciaExterna = hash('ripemd128', $fechaActual->format('d-m-y g:i:s').rand(-9000000, 9000000));
     }
 
     /**
@@ -468,6 +475,18 @@ class Documento
     public function setEntregado(bool $entregado): self
     {
         $this->entregado = $entregado;
+
+        return $this;
+    }
+
+    public function getReferenciaExterna(): ?string
+    {
+        return $this->referenciaExterna;
+    }
+
+    public function setReferenciaExterna(?string $referenciaExterna): self
+    {
+        $this->referenciaExterna = $referenciaExterna;
 
         return $this;
     }
