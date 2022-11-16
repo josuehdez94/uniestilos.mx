@@ -139,7 +139,7 @@ class Documento
         $this->registros = new ArrayCollection();
         $this->fechaHoraCreacion = $fechaActual;
         $this->pagos = new ArrayCollection();
-        $this->referenciaExterna = hash('ripemd128', $fechaActual->format('d-m-y g:i:s').rand(-9000000, 9000000));
+        $this->referenciaExterna = hash('ripemd128', $fechaActual->format('d-m-y g:i:s').rand(-8000000, 8000000));
     }
 
     /**
