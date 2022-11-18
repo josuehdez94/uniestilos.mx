@@ -70,7 +70,7 @@ class ArticuloController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $articulo->setUsuarioCreador($this->getUser());
+            //$articulo->setUsuarioCreador($this->getUser());
             $entityManager->persist($articulo);
             $entityManager->flush();
             $this->addFlash('Creado', 'Articulo creado correctamente');

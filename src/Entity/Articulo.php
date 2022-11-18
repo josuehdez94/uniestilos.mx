@@ -87,7 +87,7 @@ class Articulo
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="usuario_creo_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="usuario_creo_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $usuarioCreador;

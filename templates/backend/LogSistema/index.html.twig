@@ -1,0 +1,62 @@
+{% extends 'backend/Default/homePage.html.twig' %}
+{% block title %}Log errores{% endblock %}
+{% block content %}
+<div class="contenido mt-2">
+    <div class="page-title-area">
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <div class="breadcrumbs-area clearfix">
+                    <ul class="breadcrumbs pull-left">
+                        <li><a href="{{ url('backend_log_sistema_index') }}">Log</a></li>
+                        <li><span>errores del sistema</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-light text-center">
+                    <tr>
+                        <th>Id</th>
+                        <th>Created At</th>
+
+                        <th>Level</th>
+                        <th>Level Name</th>
+                        <th>Message</th>
+                        <th>Context</th> 
+                            {#<th>Extra</th>#}
+
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for log in logs %}
+                        <tr>
+                            <td>{{ log.id }}</td>
+                            <td>{{ log.createdAt|date('d/m/Y H:i:s') }}</td>
+
+                            <td>{{ log.level }}</td>
+                            <td>{{ log.levelName }}</td>
+                            <td>{{ log.message }}</td>
+                            {# <td>{{ log.context|json_encode : '{' }}</td> #}
+                            {#<td>{{ log.extra|slice(0, 200) }}#}
+                            </td>
+
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10">No hay registros</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {{ knp_pagination_render(logs, null, {}, {
+                            'size': 'small',
+                            'rounded': false,
+                            'align' : 'center'
+                            }) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

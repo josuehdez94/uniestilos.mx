@@ -22,3 +22,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    monolog.db_handler:
+        class: App\Generales\MonologDBHandler
+        # The 'services' type handlers must be configured manually, as specified here: https://github.com/symfony/monolog-bundle/issues/116
+        # The arguments that will go into the constructor
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - !php/const Monolog\Logger::ERROR
+            # 'Bubble' argument to false: Handlers after this one will not be called if the log has already been taken into account
+            - false

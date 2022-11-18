@@ -332,7 +332,7 @@
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
-                    <a href="index.html"><img src="assets/images/icon/logo.png" alt="logo"></a>
+                    <a href="index.html"><img src="{{ asset('assets/img/front/uniestilos-logo.jpg') }}" alt="logo"></a>
                 </div>
             </div>
             <div class="main-menu">
@@ -491,7 +491,7 @@
                                                     <span>Just Now</span>
                                                 </div>
                                             </a>
-                                            <a href="#" class="notify-item">
+                                            {# <a href="#" class="notify-item">
                                                 <div class="notify-thumb"><i class="ti-comments-smiley btn-info"></i></div>
                                                 <div class="notify-text">
                                                     <p>New Commetns On Post</p>
@@ -532,7 +532,7 @@
                                                     <p>You have Changed Your Password</p>
                                                     <span>Just Now</span>
                                                 </div>
-                                            </a>
+                                            </a> #}
                                         </div>
                                     </div>
                                 </li>
@@ -541,7 +541,7 @@
                                     <div class="dropdown-menu notify-box nt-enveloper-box">
                                         <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
                                         <div class="nofity-list">
-                                            <a href="#" class="notify-item">
+                                            {# <a href="#" class="notify-item">
                                                 <div class="notify-thumb">
                                                     <img src="assets/images/author/author-img1.jpg" alt="image">
                                                 </div>
@@ -550,8 +550,8 @@
                                                     <span class="msg">Hey I am waiting for you...</span>
                                                     <span>3:15 PM</span>
                                                 </div>
-                                            </a>
-                                            <a href="#" class="notify-item">
+                                            </a> #}
+                                            {# <a href="#" class="notify-item">
                                                 <div class="notify-thumb">
                                                     <img src="assets/images/author/author-img2.jpg" alt="image">
                                                 </div>
@@ -610,13 +610,15 @@
                                                     <span class="msg">Hey I am waiting for you...</span>
                                                     <span>3:15 PM</span>
                                                 </div>
-                                            </a>
+                                            </a> #}
                                         </div>
                                     </div>
                                 </li>
+                                {% if is_granted('ROLE_DESARROLLADOR') %}
                                 <li class="settings-btn">
                                     <i class="ti-settings"></i>
                                 </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -656,16 +658,15 @@
                 <div class="recent-activity">
                     <div class="timeline-task">
                         <div class="icon bg1">
-                            <i class="fa fa-envelope"></i>
+                            <i class="fa fa-exclamation-triangle"></i>
                         </div>
                         <div class="tm-title">
-                            <h4>Rashed sent you an email</h4>
-                            <span class="time"><i class="ti-time"></i>09:35</span>
+                            <h4>Log errores del sistema</h4>
+                            {# <span class="time"><i class="ti-time"></i>09:35</span> #}
                         </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
-                        </p>
+                        <p><a href="{{ url('backend_log_sistema_index') }}">Abrir</a></p>
                     </div>
-                    <div class="timeline-task">
+                    {# <div class="timeline-task">
                         <div class="icon bg2">
                             <i class="fa fa-check"></i>
                         </div>
@@ -759,7 +760,7 @@
                         </div>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse distinctio itaque at.
                         </p>
-                    </div>
+                    </div> #}
                 </div>
             </div>
             <div id="settings" class="tab-pane fade">
