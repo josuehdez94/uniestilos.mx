@@ -37,6 +37,7 @@
         "symfony/mailjet-mailer": "^5.4",
         "symfony/monolog-bundle": "^3.8",
         "symfony/password-hasher": "^5.4",
+        "symfony/proxy-manager-bridge": "^5.4",
         "symfony/routing": "^5.4",
         "symfony/runtime": "5.4.*",
         "symfony/security-bundle": "^5.4",
