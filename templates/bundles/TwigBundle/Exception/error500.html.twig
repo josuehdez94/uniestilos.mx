@@ -1,31 +1,19 @@
-{# {% extends not is_granted('IS_AUTHENTICATED_FULLY') ? 'home_page/homePage2.html.twig' : is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage8.html.twig' : 'home_page/homePage2.html.twig' %} #}
-{# {% if is_granted('IS_AUTHENTICATED_FULLY') %} #}
-    {% extends 'backend/Default/homePage.html.twig' %}
-{# {% else %}
-    {% extends 'home_page/homePage2.html.twig' %}
-{% endif %} #}
-{% set route = app.request.attributes.get('_route')|split('/') %}
 {% if app.user is not null %}
-    {% set respuesta = 'Si' %}
+    {% if app.user.tipoUser == 'E' %}
+        {% set usuario = 'Empleado' %}
+        {% set vista = 'backend/Default/homePage.html.twig' %}
+    {% else %}
+        {% set usuario = 'Cliente' %}
+        {% set vista = 'home_page/homePage2.html.twig' %}
+    {% endif %}
 {% else %}
-    {% set respuesta = 'No' %}
+    {% set usuario = 'Cliente' %}
+    {% set vista = 'home_page/homePage2.html.twig' %}
 {% endif %}
-{% block title %}{{ respuesta }}{% endblock title %}
-{# {% extends 'base.html.twig' %} #}
-{# {% if is_granted('ROLE_USER_BACK') %}
-    {% block content %}
-        <div class="error-area ptb--100 text-center">
-            <div class="container">
-                <div class="error-content">
-                    <h2>Error {{ status_code }}: {{ status_text }}</h2>
-                    <p>Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
-                    <a href="index.html">Back to Dashboard</a>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
-{% else %}
-    {% block content %}
+{% extends vista %}
+{% block title %}Error 500{% endblock title %}
+{% block content %}
+    {% if usuario == 'Cliente' %}
         <div id="all">
             <div id="content">
                 <div class="container">
@@ -35,13 +23,12 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
-                                    <li aria-current="page" class="breadcrumb-item active">Pagina no encontrada</li>
+                                    <li aria-current="page" class="breadcrumb-item active">Error 500</li>
                                 </ol>
                             </nav>
                             <div id="error-page" class="row">
                                 <div class="col-md-6 mx-auto">
                                     <div class="box text-center py-5">
-                                        <p class="text-center"><img src="img/logo.png" alt="Obaju template"></p>
                                         <p class="text-center">Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
                                         <p class="text-muted">Error {{ status_code }}: {{ status_text }}</p>
                                         <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
@@ -53,38 +40,14 @@
                 </div>
             </div>
         </div>
-    {% endblock %}
-{% endif %} #}
-
-{% block content %}
-        <div id="all">
-            <div id="content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <!-- breadcrumb-->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
-                                    <li aria-current="page" class="breadcrumb-item active">Pagina no encontrada</li>
-                                </ol>
-                            </nav>
-                            <div id="error-page" class="row">
-                                <div class="col-md-6 mx-auto">
-                                    <div class="box text-center py-5">
-                                        <p class="text-center"><img src="img/logo.png" alt="Obaju template"></p>
-                                        <p class="text-center">Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
-                                        <p class="text-muted">Error {{ status_code }}: {{ app.user.id }} </p>
-                                        <p class="text-muted">
-                                            hola
-                                        </p>
-                                        <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    {% else %}
+        <div class="container">
+            <div class="error-content">
+                <h2>Error {{ status_code }}</h2>
+                <p>Lo sentimos, esta página no está disponible o ha ocurrido un error interno en el servidor, estamos trabajando en ello</p>
+                <p>Mensaje error: {{ status_text }}</p>
+                <a href="#" onclick="window.history.back();">Regresar</a>
             </div>
         </div>
-    {% endblock %}
+    {% endif %}
+{% endblock %}

@@ -16,41 +16,43 @@
     </div>
     <div class="row mt-5">
         <div class="col-12">
-            <table class="table table-hover table-bordered">
-                <thead class="thead-light text-center">
-                    <tr>
-                        <th>Id</th>
-                        <th>Created At</th>
-
-                        <th>Level</th>
-                        <th>Level Name</th>
-                        <th>Message</th>
-                        <th>Context</th> 
-                            {#<th>Extra</th>#}
-
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    {% for log in logs %}
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" style="width:100%">
+                    <thead class="thead-light text-center">
                         <tr>
-                            <td>{{ log.id }}</td>
-                            <td>{{ log.createdAt|date('d/m/Y H:i:s') }}</td>
+                            <th>Id</th>
+                            <th>Created At</th>
 
-                            <td>{{ log.level }}</td>
-                            <td>{{ log.levelName }}</td>
-                            <td>{{ log.message }}</td>
-                            {# <td>{{ log.context|json_encode : '{' }}</td> #}
-                            {#<td>{{ log.extra|slice(0, 200) }}#}
-                            </td>
+                            <th>Level</th>
+                            <th>Level Name</th>
+                            <th>Message</th>
+                            {# <th>Context</th>  #}
+                                {#<th>Extra</th>#}
 
                         </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="10">No hay registros</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for log in logs %}
+                            <tr>
+                                <td>{{ log.id }}</td>
+                                <td>{{ log.createdAt|date('d/m/Y H:i:s') }}</td>
+
+                                <td>{{ log.level }}</td>
+                                <td>{{ log.levelName }}</td>
+                                <td>{{ log.message }}</td>
+                                {# <td>{{ log.context|json_encode : '{' }}</td> #}
+                                {#<td>{{ log.extra|slice(0, 200) }}#}
+                                </td>
+
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="10">No hay registros</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {{ knp_pagination_render(logs, null, {}, {
                             'size': 'small',
                             'rounded': false,

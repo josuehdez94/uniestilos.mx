@@ -1,5 +1,56 @@
-{% extends is_granted('ROLE_USER_BACK') ? 'backend/Default/homePage.html.twig' : 'Frontend/Default/base.html.twig' %}
-{% if is_granted('ROLE_USER_BACK') %}
+{% if app.user is not null %}
+    {% if app.user.tipoUser == 'E' %}
+        {% set usuario = 'Empleado' %}
+        {% set vista = 'backend/Default/homePage.html.twig' %}
+    {% else %}
+        {% set usuario = 'Cliente' %}
+        {% set vista = 'home_page/homePage2.html.twig' %}
+    {% endif %}
+{% else %}
+    {% set usuario = 'Cliente' %}
+    {% set vista = 'home_page/homePage2.html.twig' %}
+{% endif %}
+{% extends vista %}
+{% block title %}Error{% endblock title %}
+    {% block content %}
+        {% if usuario == 'Cliente' %}
+            <div id="all">
+                <div id="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <!-- breadcrumb-->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ url('frontend_home_page') }}">Inicio</a></li>
+                                        <li aria-current="page" class="breadcrumb-item active">Error</li>
+                                    </ol>
+                                </nav>
+                                <div id="error-page" class="row">
+                                    <div class="col-md-6 mx-auto">
+                                        <div class="box text-center py-5">
+                                            <h3>Ocurrió un error al procesar la acción, por favor intente mas tarde</h3>
+                                            <p class="buttons"><a href="{{ url('frontend_home_page') }}" class="btn btn-primary"><i class="fa fa-home"></i> Ir a inicio</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container">
+                <div class="error-content">
+                    <h2>Error</h2>
+                    <p>Ocurrió un error al procesar la acción, por favor intente mas tarde</p>
+                    <a href="#" onclick="window.history.back();">Regresar</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endif %}
+{# {% if is_granted('ROLE_USER_BACK') %}
     {% block content %}
         <div class="error-area ptb--100 text-center">
             <div class="container">
@@ -42,4 +93,4 @@
             </div>
         </div>
     {% endblock %}
-{% endif %}
+{% endif %} #}
