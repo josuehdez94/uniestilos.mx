@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\IngresoSistema;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,6 +69,12 @@ class SecondaryAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+        #crear registro de ingreso al sistema
+        $registro = new IngresoSistema;
+        $registro->setIp($_SERVER['REMOTE_ADDR']);
+        $registro->setUsuario($token->getUser());
+        $this->entityManager->persist($registro);
+        $this->entityManager->flush();
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);

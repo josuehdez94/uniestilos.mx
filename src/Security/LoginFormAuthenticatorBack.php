@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\IngresoSistema;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -105,6 +106,7 @@ class LoginFormAuthenticatorBack extends AbstractFormLoginAuthenticator implemen
             return new RedirectResponse($targetPath);
         }
 
+        #crear registro de inicio de sesion
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
         return new RedirectResponse($this->urlGenerator->generate('backend_mi_perfil'));
 
